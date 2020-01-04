@@ -1,11 +1,6 @@
 package me.nexters.doctor24.invoker;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.mockito.BDDMockito.*;
 
 import java.io.File;
 import java.io.FileReader;
@@ -13,7 +8,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-import static org.mockito.BDDMockito.given;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import me.nexters.doctor24.medical.hospital.invoker.ApiInvoker;
 
 @SpringBootTest
 class ApiInvokerTest {

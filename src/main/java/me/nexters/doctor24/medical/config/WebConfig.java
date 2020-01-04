@@ -1,4 +1,4 @@
-package me.nexters.doctor24.config;
+package me.nexters.doctor24.medical.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

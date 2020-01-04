@@ -1,4 +1,4 @@
-package me.nexters.doctor24.model.hospital;
+package me.nexters.doctor24.medical.hospital.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
