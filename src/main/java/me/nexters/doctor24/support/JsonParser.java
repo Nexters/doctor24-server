@@ -1,8 +1,9 @@
 package me.nexters.doctor24.support;
 
-import lombok.experimental.UtilityClass;
 import org.json.JSONObject;
 import org.json.XML;
+
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class JsonParser {
