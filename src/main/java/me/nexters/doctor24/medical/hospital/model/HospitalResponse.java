@@ -1,11 +1,16 @@
 package me.nexters.doctor24.medical.hospital.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
 public class HospitalResponse {
-    @JsonProperty("body")
-    private Body result;
+	private HospitalBody body;
 
+	public List<Hospital> getHospitals() {
+		return body.getItems().getHospitals();
+	}
 }
