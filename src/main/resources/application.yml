@@ -1,4 +1,16 @@
 hospital:
   key: 9jkqLh1hLcKTDDzsOi%2FtwtxbpUBvzmE7TkZuW019x%2BvmUeAeU%2BBUqQMUfvu1QcBpo%2Bhr45T3s%2FysWNu%2FM6goLA%3D%3D
 
+springdoc:
+  packagesToScan: me.nexters.doctor24.medical.api
+  pathsToMatch: /api/**,
+  api-docs:
+    enabled: true
 
+
+server:
+  port: 8080
+
+management:
+  endpoints.web.base-path: /application
+  endpoints.web.exposure.include: '*'
