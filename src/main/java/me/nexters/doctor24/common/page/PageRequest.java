@@ -9,4 +9,8 @@ import lombok.Value;
 public class PageRequest {
 	private int page;
 	private int count;
+
+	public int getPageSafety() {
+		return page == 0 ? 1 : page;
+	}
 }
