@@ -2,9 +2,10 @@ package me.nexters.doctor24;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableFeignClients
+import reactivefeign.spring.config.EnableReactiveFeignClients;
+
+@EnableReactiveFeignClients
 @SpringBootApplication
 public class Doctor24Application {
 

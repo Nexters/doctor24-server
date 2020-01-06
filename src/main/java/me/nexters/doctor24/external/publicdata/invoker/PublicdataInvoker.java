@@ -33,7 +33,7 @@ public class PublicdataInvoker implements HospitalRepository {
 	@Override
 	public PageResponse<Hospital> getHospitalPage(PageRequest pageRequest) {
 		String xmlResult = hospitalInvoker.getHospitals(key, pageRequest.getPageSafety(),
-			pageRequest.getCount());
+			pageRequest.getCount()).block();
 		HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
 
 		return PageResponse.of(response.getHospitals(), pageRequest);
