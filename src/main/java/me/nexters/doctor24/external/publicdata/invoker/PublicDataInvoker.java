@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.nexters.doctor24.common.page.PageRequest;
 import me.nexters.doctor24.common.page.PageResponse;
-import me.nexters.doctor24.medical.hospital.model.Hospital;
+import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.hospital.model.HospitalResponse;
-import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
+import me.nexters.doctor24.medical.hospital.repository.HospitalInquires;
 import me.nexters.doctor24.support.JacksonUtils;
 import me.nexters.doctor24.support.JsonParser;
 
@@ -23,7 +23,7 @@ import me.nexters.doctor24.support.JsonParser;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PublicdataInvoker implements HospitalRepository {
+public class PublicDataInvoker implements HospitalInquires {
 
 	private final HospitalInvoker hospitalInvoker;
 
@@ -31,9 +31,18 @@ public class PublicdataInvoker implements HospitalRepository {
 	private String key;
 
 	@Override
-	public PageResponse<Hospital> getHospitalPage(PageRequest pageRequest) {
+	public PageResponse<HospitalRaw> getHospitalPage(PageRequest pageRequest) {
 		String xmlResult = hospitalInvoker.getHospitals(key, pageRequest.getPageSafety(),
 			pageRequest.getCount()).block();
+		HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
+
+		return PageResponse.of(response.getHospitals(), pageRequest);
+	}
+
+	@Override
+	public PageResponse<HospitalRaw> getHospitalsByCityAndProvinceOrderBy(PageRequest pageRequest, String city, String province) {
+		String xmlResult = hospitalInvoker.getHospitalsByCityAndProvinceOrderBy(key, city, province, "NAME",
+			pageRequest.getPageSafety(), pageRequest.getCount()).block();
 		HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
 
 		return PageResponse.of(response.getHospitals(), pageRequest);
