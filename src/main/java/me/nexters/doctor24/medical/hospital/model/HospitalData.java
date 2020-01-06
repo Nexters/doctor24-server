@@ -13,5 +13,5 @@ import lombok.ToString;
 @ToString
 public class HospitalData {
 	@JsonProperty("item")
-	private List<Hospital> hospitals;
+	private List<HospitalRaw> hospitalRaws;
 }

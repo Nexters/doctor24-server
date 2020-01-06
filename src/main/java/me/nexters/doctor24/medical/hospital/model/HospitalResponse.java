@@ -10,7 +10,7 @@ import lombok.ToString;
 public class HospitalResponse {
 	private HospitalBody body;
 
-	public List<Hospital> getHospitals() {
-		return body.getItems().getHospitals();
+	public List<HospitalRaw> getHospitals() {
+		return body.getItems().getHospitalRaws();
 	}
 }
