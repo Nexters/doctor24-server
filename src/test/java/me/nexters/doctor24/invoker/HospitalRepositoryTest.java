@@ -23,14 +23,14 @@ class HospitalRepositoryTest {
 	@Test
 	void 전국_병원_인덱스() {
 		PageResponse<Hospital> hospitalPage =
-			hospitalRepository.getHospitalPage(PageRequest.of(2, 2000));
-		assertThat(hospitalPage.getContents().size(), is(2000));
+			hospitalRepository.getHospitalPage(PageRequest.of(2, 100));
+		assertThat(hospitalPage.getContents().size(), is(100));
 	}
 
 	@Test
 	void 전체_조회_샘플() {
 		PageResponse<Hospital> hospitalPage =
-			hospitalRepository.getHospitalPage(PageRequest.of(1, 2000));
+			hospitalRepository.getHospitalPage(PageRequest.of(1, 100));
 		List<Hospital> hospitals = new ArrayList<>(hospitalPage.getContents());
 		while (hospitalPage.hasNext()) {
 			hospitalPage =
