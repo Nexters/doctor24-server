@@ -1,4 +1,4 @@
-package me.nexters.doctor24.medical.hospital.model.mongo;
+package me.nexters.doctor24.medical.common;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

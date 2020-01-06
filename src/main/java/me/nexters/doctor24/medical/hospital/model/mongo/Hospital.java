@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.HospitalType;
 
 @Getter
