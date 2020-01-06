@@ -2,6 +2,7 @@ package me.nexters.doctor24.medical.api.request.param;
 
 import javax.validation.constraints.NotNull;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,8 +11,11 @@ import lombok.Data;
 @Data
 public class Location {
 	@NotNull
+	@Schema(description = "위도 값")
 	private String latitude;
 	@NotNull
+	@Schema(description = "경도 값")
 	private String longitude;
+	@Schema(description = "반경 범위")
 	private int radiusMeter = 500;
 }
