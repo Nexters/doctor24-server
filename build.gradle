@@ -30,11 +30,13 @@ dependencies {
     implementation 'com.playtika.reactivefeign:feign-reactor-spring-configuration:1.0.45'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.json:json:20180813'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
+    testCompile 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0' // embedded mongo test
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
