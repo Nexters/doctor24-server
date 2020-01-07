@@ -1,6 +1,7 @@
-package me.nexters.doctor24.medical.hospital.repository;
+package me.nexters.doctor24.medical.pharmacy.repository;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -11,17 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import me.nexters.doctor24.medical.common.Day;
-import me.nexters.doctor24.medical.hospital.model.HospitalType;
-import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
+import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 
 @DataMongoTest
-class HospitalRepositoryTest {
-
+class PharmacyRepositoryTest {
 	@Autowired
-	private HospitalRepository hospitalRepository;
+	private PharmacyRepository pharmacyRepository;
 
 	@Test
-	void 병원_도메인_저장() {
+	void 약국_도메인_저장() {
 		List<Day> days = List.of(
 			Day.of(DayOfWeek.MONDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
 			Day.of(DayOfWeek.TUESDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
@@ -32,18 +31,17 @@ class HospitalRepositoryTest {
 			Day.of(DayOfWeek.SUNDAY, LocalTime.of(9, 0), LocalTime.of(18, 0))
 		);
 
-		Hospital hospital = Hospital.builder()
-			.id("B1100027")
-			.hospitalType(HospitalType.find("한방병원"))
+		Pharmacy pharmacy = Pharmacy.builder()
+			.id("C1800232")
 			.days(days)
-			.address("서울특별시 강남구 봉은사로 612 (삼성동)")
-			.latitude(37.514279685612216)
-			.longitude(127.06214779521632)
-			.phone("02-2222-4888")
+			.latitude(36.5195854195)
+			.longitude(127.2353413861)
+			.name("고운길온누리약국")
+			.phone("070-7716-7577")
 			.build();
 
-		Hospital saved = hospitalRepository.save(hospital);
+		Pharmacy saved = pharmacyRepository.save(pharmacy);
 
-		assertThat(hospital).isEqualTo(saved);
+		assertThat(pharmacy).isEqualTo(saved);
 	}
 }

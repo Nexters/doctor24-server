@@ -1,4 +1,4 @@
-package me.nexters.doctor24.medical.hospital.model.mongo;
+package me.nexters.doctor24.medical.pharmacy.model.mongo;
 
 import java.util.List;
 
@@ -10,14 +10,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import me.nexters.doctor24.medical.common.Day;
-import me.nexters.doctor24.medical.hospital.model.HospitalType;
 
 @Getter
 @ToString
 @Builder
 @EqualsAndHashCode(of = "id")
-@Document(collection = "hospital")
-public class Hospital {
+@Document(collection = "pharmacy")
+public class Pharmacy {
 
 	@MongoId
 	private String id;
@@ -26,7 +25,6 @@ public class Hospital {
 	private double latitude;
 	private double longitude;
 	private String address;
-	private HospitalType hospitalType;
 	private String phone;
 
 	// TODO 필요한 정보 더 로드할 예정

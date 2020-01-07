@@ -14,6 +14,9 @@ import me.nexters.doctor24.common.page.PageResponse;
 import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.hospital.model.HospitalResponse;
 import me.nexters.doctor24.medical.hospital.repository.HospitalInquires;
+import me.nexters.doctor24.medical.pharmacy.model.PharmacyRaw;
+import me.nexters.doctor24.medical.pharmacy.model.PharmacyResponse;
+import me.nexters.doctor24.medical.pharmacy.repository.PharmacyInquires;
 import me.nexters.doctor24.support.JacksonUtils;
 import me.nexters.doctor24.support.JsonParser;
 
@@ -23,9 +26,10 @@ import me.nexters.doctor24.support.JsonParser;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PublicDataInvoker implements HospitalInquires {
+public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
 
 	private final HospitalInvoker hospitalInvoker;
+	private final PharmacyInvoker pharmacyInvoker;
 
 	@Value("${hospital.key}")
 	private String key;
@@ -53,5 +57,23 @@ public class PublicDataInvoker implements HospitalInquires {
 		JSONObject jsonResult = JsonParser.parse(xml).getJSONObject("response");
 		return JacksonUtils.readValue(jsonResult.toString(), tClass)
 			.orElseThrow(() -> new HttpServerErrorException(HttpStatus.NOT_FOUND));
+	}
+
+	@Override
+	public PageResponse<PharmacyRaw> getPharmacyPage(PageRequest pageRequest) {
+		String xmlResult = pharmacyInvoker.getPharmacies(key, pageRequest.getPageSafety(),
+			pageRequest.getCount()).block();
+		PharmacyResponse response = toObjectFromResponse(xmlResult, PharmacyResponse.class);
+
+		return PageResponse.of(response.getPharmacies(), pageRequest);
+	}
+
+	@Override
+	public PageResponse<PharmacyRaw> getPharmacyByCityAndProvinceOrderBy(PageRequest pageRequest, String city, String province) {
+		String xmlResult = pharmacyInvoker.getPharmaciesByCityAndProvinceOrderBy(key, city, province, "NAME",
+			pageRequest.getPageSafety(), pageRequest.getCount()).block();
+		PharmacyResponse response = toObjectFromResponse(xmlResult, PharmacyResponse.class);
+
+		return PageResponse.of(response.getPharmacies(), pageRequest);
 	}
 }
