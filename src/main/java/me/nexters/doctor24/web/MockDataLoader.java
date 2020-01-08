@@ -31,10 +31,17 @@ public class MockDataLoader implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		PageResponse<HospitalRaw> hospitalResult = publicdataInvoker.getHospitalsByCityAndProvinceOrderBy(
+		PageResponse<HospitalRaw> hospitalResult1 = publicdataInvoker.getHospitalsByCityAndProvinceOrderBy(
 			PageRequest.of(1, 10), "서울특별시", "강남구");
 
-		hospitalResult.getContents().stream()
+		hospitalResult1.getContents().stream()
+			.map(this::hospitalParser)
+			.forEach(hospitalRepository::save);
+
+		PageResponse<HospitalRaw> hospitalResult2 = publicdataInvoker.getHospitalsByCityAndProvinceOrderBy(
+			PageRequest.of(1, 10), "경기도", "안양시");
+
+		hospitalResult2.getContents().stream()
 			.map(this::hospitalParser)
 			.forEach(hospitalRepository::save);
 
