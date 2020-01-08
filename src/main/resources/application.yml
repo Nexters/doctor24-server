@@ -14,3 +14,17 @@ server:
 management:
   endpoints.web.base-path: /application
   endpoints.web.exposure.include: '*'
+
+spring:
+  profiles:
+    active: local
+---
+spring:
+  profiles: local
+
+---
+spring:
+  profiles: dev
+  data:
+    mongodb:
+      uri: mongodb://10.41.169.176:17017
