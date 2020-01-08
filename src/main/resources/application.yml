@@ -28,3 +28,4 @@ spring:
   data:
     mongodb:
       uri: mongodb://10.41.169.176:17017
+      database: doctor
