@@ -1,14 +1,14 @@
 package me.nexters.doctor24.medical.api;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,8 +38,10 @@ public class MedicalController {
 		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema =
 		@Schema(implementation = FacilityResponse.class)))})
 	@GetMapping(value = "/facilities")
-	public Flux<FacilityResponse> getFacilities(@RequestParam String latitude, @RequestParam String longitude,
-		@RequestParam String radiusKilometer) {
-		return hospitalService.getFacilitiesWithinRange(latitude, longitude, radiusKilometer);
+	public Flux<FacilityResponse> getFacilities(
+		@Parameter(name = "medical type", description = "기관 종류", example = "hospital, pharmacy, animal") @PathVariable String medicalType,
+		@RequestParam String latitude,
+		@RequestParam String longitude) {
+		return hospitalService.getFacilitiesWithinRange(latitude, longitude);
 	}
 }

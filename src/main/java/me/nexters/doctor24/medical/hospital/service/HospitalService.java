@@ -42,7 +42,7 @@ public class HospitalService {
 			.build();
 	}
 
-	public Flux<FacilityResponse> getFacilitiesWithinRange(String latitude, String longitude, String radiusKilometer) {
+	public Flux<FacilityResponse> getFacilitiesWithinRange(String latitude, String longitude) {
 		return null;
 	}
 }
