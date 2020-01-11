@@ -37,8 +37,6 @@ class HospitalRepositoryTest {
 			.hospitalType(HospitalType.find("한방병원"))
 			.days(days)
 			.address("서울특별시 강남구 봉은사로 612 (삼성동)")
-			.latitude(37.514279685612216)
-			.longitude(127.06214779521632)
 			.phone("02-2222-4888")
 			.build();
 
