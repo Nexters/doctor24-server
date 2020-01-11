@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import me.nexters.doctor24.medical.api.request.param.Location;
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.SwaggerApiTag;
 import me.nexters.doctor24.medical.hospital.service.HospitalService;
@@ -38,11 +38,8 @@ public class MedicalController {
 		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema =
 		@Schema(implementation = FacilityResponse.class)))})
 	@GetMapping(value = "/facilities")
-	public Flux<FacilityResponse> getFacilities(@Valid Location location) {
-		//		return Flux.just(FacilityResponse.of("testType", "testName"),
-		//			FacilityResponse.of("testType2", "testName2"));
-		//
-		// TODO 조회를 나눠서 할지 전부 다 할지??
-		return null;
+	public Flux<FacilityResponse> getFacilities(@RequestParam String latitude, @RequestParam String longitude,
+		@RequestParam String radiusKilometer) {
+		return hospitalService.getFacilitiesWithinRange(latitude, longitude, radiusKilometer);
 	}
 }

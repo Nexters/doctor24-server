@@ -1,5 +1,10 @@
 package me.nexters.doctor24.medical.hospital.model;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.AllArgsConstructor;
@@ -17,10 +22,11 @@ public enum HospitalType {
 
 	private final String type;
 
+	private static final Map<String, HospitalType> holder =
+		Collections.unmodifiableMap(Stream.of(HospitalType.values())
+			.collect(Collectors.toMap(HospitalType::getType, Function.identity())));
+
 	public static HospitalType find(String type) {
-		return Stream.of(values())
-			.filter(hospitalType -> hospitalType.type.equals(type))
-			.findAny()
-			.orElse(UNKNOWN);
+		return Optional.ofNullable(holder.get(type)).orElse(UNKNOWN);
 	}
 }
