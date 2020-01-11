@@ -1,0 +1,13 @@
+spring:
+  profiles: local, dev
+
+
+springdoc:
+  packagesToScan: me.nexters.doctor24.medical.api
+  pathsToMatch: /api/**,
+  api-docs:
+    enabled: true
+#springdoc:
+ # swagger-ui:
+  #  path: /swagger-ui.html
+---
