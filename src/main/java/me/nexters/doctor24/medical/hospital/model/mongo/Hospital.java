@@ -16,15 +16,14 @@ import me.nexters.doctor24.medical.hospital.model.HospitalType;
 @ToString
 @Builder
 @EqualsAndHashCode(of = "id")
-@Document(collection = "hospital")
+@Document(collection = "doctor")
 public class Hospital {
 
 	@MongoId
 	private String id;
 	private String name;
 	private List<Day> days;
-	private double latitude;
-	private double longitude;
+	private Location location;
 	private String address;
 	private HospitalType hospitalType;
 	private String phone;
