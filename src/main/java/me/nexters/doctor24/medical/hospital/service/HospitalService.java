@@ -12,6 +12,7 @@ import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
 import me.nexters.doctor24.support.DistanceUtils;
+import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -25,11 +26,11 @@ public class HospitalService {
 				hospital -> DistanceUtils.calculateDistanceInKilometer(hospital.getLatitude(), hospital.getLongitude(),
 					Double.parseDouble(location.getLatitude()), Double.parseDouble(location.getLongitude())) <=
 					location.getRadiusKilometer())
-			.map(this::toDto)
+			.map(this::toFacilitiyResponse)
 			.collect(Collectors.toList());
 	}
 
-	private FacilityResponse toDto(Hospital hospital) {
+	private FacilityResponse toFacilitiyResponse(Hospital hospital) {
 		return FacilityResponse.builder()
 			.medicalType("치과") // TODO 카테고리화
 			.name(hospital.getName())
@@ -39,5 +40,9 @@ public class HospitalService {
 			.longitude(hospital.getLongitude())
 			.phone(hospital.getPhone())
 			.build();
+	}
+
+	public Flux<FacilityResponse> getFacilitiesWithinRange(String latitude, String longitude, String radiusKilometer) {
+		return null;
 	}
 }
