@@ -35,7 +35,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
-    implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0' // embedded mongo test
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0' // embedded mongo test
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
