@@ -2,5 +2,5 @@ spring:
   profiles: dev
   data:
     mongodb:
-      uri: mongodb://10.41.169.176:17017
+      uri: mongodb://27.96.135.239:27017
       database: doctor
