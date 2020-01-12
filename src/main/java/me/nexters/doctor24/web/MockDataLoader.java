@@ -10,11 +10,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import me.nexters.doctor24.common.page.PageRequest;
-import me.nexters.doctor24.common.page.PageResponse;
 import me.nexters.doctor24.external.publicdata.invoker.PublicDataInvoker;
-import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.common.Day;
+import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
 import me.nexters.doctor24.medical.pharmacy.model.PharmacyRaw;
@@ -31,6 +29,7 @@ public class MockDataLoader implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
+		/*
 		PageResponse<HospitalRaw> hospitalResult1 = publicdataInvoker.getHospitalsByCityAndProvinceOrderBy(
 			PageRequest.of(1, 10), "서울특별시", "강남구");
 
@@ -51,6 +50,7 @@ public class MockDataLoader implements ApplicationRunner {
 		pharmacyResult.getContents().stream()
 			.map(this::pharmacyParser)
 			.forEach(pharmacyRepository::save);
+		 */
 	}
 
 	// TODO Batch processor 에서 필요한 파싱 로직이므로 간소화 혹은 분리

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
+import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.api.type.SwaggerApiTag;
 import me.nexters.doctor24.medical.hospital.service.HospitalService;
 import reactor.core.publisher.Flux;
@@ -26,11 +26,11 @@ import reactor.core.publisher.Flux;
 @Tag(name = SwaggerApiTag.MEDICAL, description = "의료 서비스 정보 API")
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@RequestMapping("/api/v1/medicals/{medicalType}")
+@RequestMapping("/api/v1/medicals/{type}")
 public class MedicalController {
 	private final HospitalService hospitalService;
 
-	@Operation(summary = "특정 위치에 특정 카테고리(병원, 약국, 동물병원) 의료 서비스 목륵을 제공한다",
+	@Operation(summary = "특정 위치에 반경 500m 안에 특정 카테고리(병원, 약국, 동물병원) 의료 서비스 목륵을 제공한다",
 		description = "search medical service by interfaceId",
 		tags = {SwaggerApiTag.MEDICAL})
 	@ApiResponses(value = {
@@ -39,9 +39,11 @@ public class MedicalController {
 		@Schema(implementation = FacilityResponse.class)))})
 	@GetMapping(value = "/facilities")
 	public Flux<FacilityResponse> getFacilities(
-		@Parameter(name = "medical type", description = "기관 종류", example = "hospital, pharmacy, animal") @PathVariable String medicalType,
-		@RequestParam String latitude,
-		@RequestParam String longitude) {
-		return hospitalService.getFacilitiesWithinRange(latitude, longitude);
+		@PathVariable MedicalType type, @RequestParam String latitude, @RequestParam String longitude) {
+		if (type != MedicalType.hospital) {
+			throw new UnsupportedOperationException("현재는 HOSPITAL 타입만 지원 합니다");
+		}
+		// medicalType에 따른 처리 해야함
+		return hospitalService.getFacilitiesWithinRange(Double.parseDouble(latitude), Double.parseDouble(longitude));
 	}
 }
