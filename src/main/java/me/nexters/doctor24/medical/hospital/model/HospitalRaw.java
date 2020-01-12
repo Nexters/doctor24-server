@@ -16,6 +16,7 @@ public class HospitalRaw {
 	private String dutyTel1;
 	private String dutyAddr;
 	private String dutyInf;
+	private String dutyDivNam;
 
 	@JsonProperty("hpid")
 	private String id;
