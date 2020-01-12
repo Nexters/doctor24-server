@@ -14,7 +14,6 @@ import me.nexters.doctor24.external.publicdata.invoker.PublicDataInvoker;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
-import me.nexters.doctor24.medical.hospital.model.mongo.Location;
 import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
 
 @SpringBootTest
@@ -82,8 +81,8 @@ public class Dataload {
 		return Hospital.builder()
 			.id(hospitalRaw.getId())
 			.name(hospitalRaw.getName())
-			.location(new Location("Point",
-				new double[]{hospitalRaw.getLongitude(), hospitalRaw.getLatitude()}))
+			//.location(new Location("Point",
+			//	new Double[]{hospitalRaw.getLongitude(), hospitalRaw.getLatitude()}))
 			.phone(hospitalRaw.getDutyTel1())
 			.address(hospitalRaw.getDutyAddr())
 			.days(days)
