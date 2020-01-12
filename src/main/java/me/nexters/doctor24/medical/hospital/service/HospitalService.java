@@ -22,6 +22,8 @@ public class HospitalService {
 	public Flux<FacilityResponse> getFacilitiesWithinRange(double latitude, double longitude) {
 		return hospitalRepository.findByLocationNear(new Point(longitude, latitude),
 			new Distance(DEFAULT_DISTANCE, Metrics.KILOMETERS))
-			.map(FacilityResponse::from);
+			.map(FacilityResponse::from)
+			// 아래 코드는 임시
+			.limitRequest(15);
 	}
 }

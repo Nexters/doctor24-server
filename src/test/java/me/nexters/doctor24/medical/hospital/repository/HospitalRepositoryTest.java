@@ -2,7 +2,6 @@ package me.nexters.doctor24.medical.hospital.repository;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
-import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -30,13 +29,13 @@ class HospitalRepositoryTest {
 	@BeforeEach
 	void 병원_도메인_저장() {
 		List<Day> days = List.of(
-			Day.of(DayOfWeek.MONDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
-			Day.of(DayOfWeek.TUESDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
-			Day.of(DayOfWeek.WEDNESDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
-			Day.of(DayOfWeek.THURSDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
-			Day.of(DayOfWeek.FRIDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
-			Day.of(DayOfWeek.SATURDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
-			Day.of(DayOfWeek.SUNDAY, LocalTime.of(9, 0), LocalTime.of(18, 0))
+			Day.of(Day.DayType.MONDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
+			Day.of(Day.DayType.TUESDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
+			Day.of(Day.DayType.WEDNESDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
+			Day.of(Day.DayType.THURSDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
+			Day.of(Day.DayType.FRIDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
+			Day.of(Day.DayType.SATURDAY, LocalTime.of(9, 0), LocalTime.of(18, 0)),
+			Day.of(Day.DayType.SUNDAY, LocalTime.of(9, 0), LocalTime.of(18, 0))
 		);
 
 		GeoJsonPoint location = new GeoJsonPoint(127.0395873429168, 37.485612179925724);
