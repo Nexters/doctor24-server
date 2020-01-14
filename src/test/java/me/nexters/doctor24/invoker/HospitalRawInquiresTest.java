@@ -3,7 +3,6 @@ package me.nexters.doctor24.invoker;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +21,7 @@ import me.nexters.doctor24.medical.hospital.model.HospitalType;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.hospital.repository.HospitalInquires;
 import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
+import me.nexters.doctor24.support.OpeningHourParser;
 
 @Slf4j
 @SpringBootTest
@@ -81,66 +81,50 @@ class HospitalRawInquiresTest {
 			List<Day> days = new ArrayList<>();
 			if (Objects.nonNull(hospitalRaw.getMondayStart()) && Objects.nonNull(hospitalRaw.getMondayClose())) {
 				days.add(Day.of(Day.DayType.MONDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getMondayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getMondayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getMondayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getMondayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getMondayStart()),
+					OpeningHourParser.parse(hospitalRaw.getMondayClose())));
 			}
 
 			if (Objects.nonNull(hospitalRaw.getTuesdayStart()) && Objects.nonNull(hospitalRaw.getTuesdayClose())) {
 				days.add(Day.of(Day.DayType.TUESDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getTuesdayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getTuesdayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getTuesdayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getTuesdayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getTuesdayStart()),
+					OpeningHourParser.parse(hospitalRaw.getTuesdayClose())));
 			}
 
 			if (Objects.nonNull(hospitalRaw.getWednesdayStart()) && Objects.nonNull(hospitalRaw.getWednesdayClose())) {
 				days.add(Day.of(Day.DayType.WEDNESDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getWednesdayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getWednesdayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getWednesdayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getWednesdayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getWednesdayStart()),
+					OpeningHourParser.parse(hospitalRaw.getWednesdayClose())));
 			}
 
 			if (Objects.nonNull(hospitalRaw.getThursdayStart()) && Objects.nonNull(hospitalRaw.getThursdayClose())) {
 				days.add(Day.of(Day.DayType.THURSDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getThursdayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getThursdayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getThursdayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getThursdayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getThursdayStart()),
+					OpeningHourParser.parse(hospitalRaw.getThursdayClose())));
 			}
 
 			if (Objects.nonNull(hospitalRaw.getFridayStart()) && Objects.nonNull(hospitalRaw.getFridayClose())) {
 				days.add(Day.of(Day.DayType.FRIDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getFridayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getFridayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getFridayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getFridayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getFridayStart()),
+					OpeningHourParser.parse(hospitalRaw.getFridayClose())));
 			}
 
 			if (Objects.nonNull(hospitalRaw.getSaturdayStart()) && Objects.nonNull(hospitalRaw.getSaturdayClose())) {
 				days.add(Day.of(Day.DayType.SATURDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getSaturdayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getSaturdayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getSaturdayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getSaturdayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getSaturdayStart()),
+					OpeningHourParser.parse(hospitalRaw.getSaturdayClose())));
 			}
 
 			if (Objects.nonNull(hospitalRaw.getSundayStart()) && Objects.nonNull(hospitalRaw.getSundayClose())) {
 				days.add(Day.of(Day.DayType.SUNDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getSundayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getSundayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getSundayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getSundayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getSundayStart()),
+					OpeningHourParser.parse(hospitalRaw.getSundayClose())));
 			}
 
 			if (Objects.nonNull(hospitalRaw.getHolidayStart()) && Objects.nonNull(hospitalRaw.getHolidayClose())) {
 				days.add(Day.of(Day.DayType.HOLIDAY,
-					LocalTime.of(Integer.parseInt(hospitalRaw.getHolidayStart().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getHolidayStart().substring(2, 4))),
-					LocalTime.of(Integer.parseInt(hospitalRaw.getHolidayClose().substring(0, 2)),
-						Integer.parseInt(hospitalRaw.getHolidayClose().substring(2, 4)))));
+					OpeningHourParser.parse(hospitalRaw.getHolidayStart()),
+					OpeningHourParser.parse(hospitalRaw.getHolidayClose())));
 			}
 
 			return Hospital.builder()
