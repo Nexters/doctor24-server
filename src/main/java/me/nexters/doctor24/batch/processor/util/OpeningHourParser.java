@@ -1,4 +1,4 @@
-package me.nexters.doctor24.support;
+package me.nexters.doctor24.batch.processor.util;
 
 import java.time.LocalTime;
 

@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import lombok.extern.slf4j.Slf4j;
+import me.nexters.doctor24.batch.processor.util.OpeningHourParser;
 import me.nexters.doctor24.common.page.PageRequest;
 import me.nexters.doctor24.common.page.PageResponse;
 import me.nexters.doctor24.medical.common.Day;
@@ -21,7 +22,6 @@ import me.nexters.doctor24.medical.hospital.model.HospitalType;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.hospital.repository.HospitalInquires;
 import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
-import me.nexters.doctor24.support.OpeningHourParser;
 
 @Slf4j
 @SpringBootTest
@@ -131,9 +131,9 @@ class HospitalRawInquiresTest {
 				.id(hospitalRaw.getId())
 				.name(hospitalRaw.getName())
 				.location(new GeoJsonPoint(hospitalRaw.getLongitude(), hospitalRaw.getLatitude()))
-				.phone(hospitalRaw.getDutyTel1())
-				.address(hospitalRaw.getDutyAddr())
-				.hospitalType(HospitalType.find(hospitalRaw.getDutyDivNam()))
+				.phone(hospitalRaw.getPhone())
+				.address(hospitalRaw.getAddress())
+				.hospitalType(HospitalType.find(hospitalRaw.getType()))
 				.days(days)
 				.build();
 		} catch (Exception e) {

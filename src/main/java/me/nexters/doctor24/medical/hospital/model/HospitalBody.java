@@ -1,6 +1,5 @@
 package me.nexters.doctor24.medical.hospital.model;
 
-
 import lombok.Getter;
 import lombok.ToString;
 

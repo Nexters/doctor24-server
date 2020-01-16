@@ -3,20 +3,19 @@ package me.nexters.doctor24.medical.hospital.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
+@Setter
 @ToString
 public class HospitalRaw {
 	private String dutyEmclsName;
 	private int rnum;
 	private String phpid;
 	private String dutyEmcls;
-	private String dutyTel1;
-	private String dutyAddr;
 	private String dutyInf;
-	private String dutyDivNam;
 
 	@JsonProperty("hpid")
 	private String id;
@@ -29,6 +28,15 @@ public class HospitalRaw {
 
 	@JsonProperty("dutyName")
 	private String name;
+
+	@JsonProperty("dutyTel1")
+	private String phone;
+
+	@JsonProperty("dutyAddr")
+	private String address;
+
+	@JsonProperty("dutyDivNam")
+	private String type;
 
 	@JsonProperty("dutyTime1s")
 	private String mondayStart;
