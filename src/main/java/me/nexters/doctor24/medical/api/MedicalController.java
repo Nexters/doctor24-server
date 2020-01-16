@@ -1,5 +1,7 @@
 package me.nexters.doctor24.medical.api;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterStyle;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import me.nexters.doctor24.medical.api.request.filter.OperatingHoursFilterWrapper;
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.api.type.SwaggerApiTag;
@@ -39,11 +44,18 @@ public class MedicalController {
 		@Schema(implementation = FacilityResponse.class)))})
 	@GetMapping(value = "/facilities")
 	public Flux<FacilityResponse> getFacilities(
-		@PathVariable MedicalType type, @RequestParam String latitude, @RequestParam String longitude) {
+		@PathVariable MedicalType type, @RequestParam String latitude, @RequestParam String longitude,
+		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
 		if (type != MedicalType.hospital) {
 			throw new UnsupportedOperationException("현재는 HOSPITAL 타입만 지원 합니다");
 		}
 		// medicalType에 따른 처리 해야함
-		return hospitalService.getFacilitiesWithinRange(Double.parseDouble(latitude), Double.parseDouble(longitude));
+		if (operatingHoursFilterWrapper.getOperatingHours() == null) {
+			return hospitalService.getFacilitiesWithinRange(Double.parseDouble(latitude),
+				Double.parseDouble(longitude));
+		}
+
+		return hospitalService.getFacilitiesWithinRangeWithFiltering(Double.parseDouble(latitude),
+			Double.parseDouble(longitude), operatingHoursFilterWrapper.toDay());
 	}
 }
