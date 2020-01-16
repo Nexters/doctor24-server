@@ -1,6 +1,7 @@
 package me.nexters.doctor24.medical.hospital.model.mongo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -28,4 +29,16 @@ public class Hospital {
 	private String phone;
 
 	// TODO 필요한 정보 더 로드할 예정
+
+	public boolean isOpen(Day requestDay) {
+		Optional<Day> matchDayOpt = days.stream()
+			.filter(day -> day.getDayType() == requestDay.getDayType())
+			.findAny();
+		if (matchDayOpt.isEmpty()) {
+			return false;
+		}
+
+		Day matchDay = matchDayOpt.get();
+		return matchDay.isInRange(requestDay.getStartTime(), requestDay.getEndTime());
+	}
 }
