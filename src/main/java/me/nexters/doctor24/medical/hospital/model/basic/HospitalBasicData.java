@@ -1,4 +1,4 @@
-package me.nexters.doctor24.medical.hospital.model;
+package me.nexters.doctor24.medical.hospital.model.basic;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class HospitalData {
+public class HospitalBasicData {
 	@JsonProperty("item")
-	private List<HospitalRaw> hospitalRaws;
+	private List<HospitalBasicRaw> hospitalBasicRaws;
 }

@@ -26,6 +26,7 @@ public class Hospital {
 	private String address;
 	private HospitalType hospitalType;
 	private String phone;
+	private String categories;
 
 	// TODO 필요한 정보 더 로드할 예정
 }

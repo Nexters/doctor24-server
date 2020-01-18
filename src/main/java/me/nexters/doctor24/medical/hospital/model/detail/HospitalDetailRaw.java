@@ -11,6 +11,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class HospitalDetailRaw {
+	@JsonProperty("hpid")
+	private String id;
 	@JsonProperty("dgidIdName")
 	private String categories;
 }

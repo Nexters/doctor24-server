@@ -17,7 +17,7 @@ import me.nexters.doctor24.batch.processor.util.OpeningHourParser;
 import me.nexters.doctor24.common.page.PageRequest;
 import me.nexters.doctor24.common.page.PageResponse;
 import me.nexters.doctor24.medical.common.Day;
-import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
+import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
 import me.nexters.doctor24.medical.hospital.model.HospitalType;
 import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
@@ -26,7 +26,7 @@ import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
 
 @Slf4j
 @SpringBootTest
-class HospitalRawInquiresTest {
+class HospitalBasicRawInquiresTest {
 	@Autowired
 	private HospitalInquires hospitalInquires;
 	@Autowired
@@ -36,7 +36,7 @@ class HospitalRawInquiresTest {
 
 	@Test
 	void 전국_병원_인덱스() {
-		PageResponse<HospitalRaw> hospitalPage =
+		PageResponse<HospitalBasicRaw> hospitalPage =
 			hospitalInquires.getHospitalPage(PageRequest.of(2, 100));
 		assertThat(hospitalPage.getContents().size(), is(100));
 	}
@@ -51,7 +51,7 @@ class HospitalRawInquiresTest {
 
 	@Test
 	void 강남구_병원_호출() {
-		PageResponse<HospitalRaw> hospitalsByCityAndProvinceOrderBy =
+		PageResponse<HospitalBasicRaw> hospitalsByCityAndProvinceOrderBy =
 			hospitalInquires.getHospitalsByCityAndProvinceOrderBy(
 				PageRequest.of(1, 100), "서울특별시", "강남구");
 
@@ -60,9 +60,9 @@ class HospitalRawInquiresTest {
 
 	//@Test
 	void 병원_전체_목록_마이그레이션() {
-		PageResponse<HospitalRaw> hospitalPage =
+		PageResponse<HospitalBasicRaw> hospitalPage =
 			hospitalInquires.getHospitalPage(PageRequest.of(1, 250));
-		List<HospitalRaw> hospitals = new ArrayList<>(hospitalPage.getContents());
+		List<HospitalBasicRaw> hospitals = new ArrayList<>(hospitalPage.getContents());
 		while (hospitalPage.hasNext()) {
 			hospitalPage =
 				hospitalInquires.getHospitalPage(PageRequest.of(hospitalPage.getNextPage(), 250));
@@ -85,68 +85,68 @@ class HospitalRawInquiresTest {
 		System.out.println("success migration count " + migrationCount);
 	}
 
-	private Hospital hospitalParser(HospitalRaw hospitalRaw) {
+	private Hospital hospitalParser(HospitalBasicRaw hospitalBasicRaw) {
 		try {
 			List<Day> days = new ArrayList<>();
-			if (Objects.nonNull(hospitalRaw.getMondayStart()) && Objects.nonNull(hospitalRaw.getMondayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getMondayStart()) && Objects.nonNull(hospitalBasicRaw.getMondayClose())) {
 				days.add(Day.of(Day.DayType.MONDAY,
-					OpeningHourParser.parse(hospitalRaw.getMondayStart()),
-					OpeningHourParser.parse(hospitalRaw.getMondayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getMondayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getMondayClose())));
 			}
 
-			if (Objects.nonNull(hospitalRaw.getTuesdayStart()) && Objects.nonNull(hospitalRaw.getTuesdayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getTuesdayStart()) && Objects.nonNull(hospitalBasicRaw.getTuesdayClose())) {
 				days.add(Day.of(Day.DayType.TUESDAY,
-					OpeningHourParser.parse(hospitalRaw.getTuesdayStart()),
-					OpeningHourParser.parse(hospitalRaw.getTuesdayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getTuesdayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getTuesdayClose())));
 			}
 
-			if (Objects.nonNull(hospitalRaw.getWednesdayStart()) && Objects.nonNull(hospitalRaw.getWednesdayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getWednesdayStart()) && Objects.nonNull(hospitalBasicRaw.getWednesdayClose())) {
 				days.add(Day.of(Day.DayType.WEDNESDAY,
-					OpeningHourParser.parse(hospitalRaw.getWednesdayStart()),
-					OpeningHourParser.parse(hospitalRaw.getWednesdayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getWednesdayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getWednesdayClose())));
 			}
 
-			if (Objects.nonNull(hospitalRaw.getThursdayStart()) && Objects.nonNull(hospitalRaw.getThursdayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getThursdayStart()) && Objects.nonNull(hospitalBasicRaw.getThursdayClose())) {
 				days.add(Day.of(Day.DayType.THURSDAY,
-					OpeningHourParser.parse(hospitalRaw.getThursdayStart()),
-					OpeningHourParser.parse(hospitalRaw.getThursdayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getThursdayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getThursdayClose())));
 			}
 
-			if (Objects.nonNull(hospitalRaw.getFridayStart()) && Objects.nonNull(hospitalRaw.getFridayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getFridayStart()) && Objects.nonNull(hospitalBasicRaw.getFridayClose())) {
 				days.add(Day.of(Day.DayType.FRIDAY,
-					OpeningHourParser.parse(hospitalRaw.getFridayStart()),
-					OpeningHourParser.parse(hospitalRaw.getFridayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getFridayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getFridayClose())));
 			}
 
-			if (Objects.nonNull(hospitalRaw.getSaturdayStart()) && Objects.nonNull(hospitalRaw.getSaturdayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getSaturdayStart()) && Objects.nonNull(hospitalBasicRaw.getSaturdayClose())) {
 				days.add(Day.of(Day.DayType.SATURDAY,
-					OpeningHourParser.parse(hospitalRaw.getSaturdayStart()),
-					OpeningHourParser.parse(hospitalRaw.getSaturdayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getSaturdayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getSaturdayClose())));
 			}
 
-			if (Objects.nonNull(hospitalRaw.getSundayStart()) && Objects.nonNull(hospitalRaw.getSundayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getSundayStart()) && Objects.nonNull(hospitalBasicRaw.getSundayClose())) {
 				days.add(Day.of(Day.DayType.SUNDAY,
-					OpeningHourParser.parse(hospitalRaw.getSundayStart()),
-					OpeningHourParser.parse(hospitalRaw.getSundayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getSundayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getSundayClose())));
 			}
 
-			if (Objects.nonNull(hospitalRaw.getHolidayStart()) && Objects.nonNull(hospitalRaw.getHolidayClose())) {
+			if (Objects.nonNull(hospitalBasicRaw.getHolidayStart()) && Objects.nonNull(hospitalBasicRaw.getHolidayClose())) {
 				days.add(Day.of(Day.DayType.HOLIDAY,
-					OpeningHourParser.parse(hospitalRaw.getHolidayStart()),
-					OpeningHourParser.parse(hospitalRaw.getHolidayClose())));
+					OpeningHourParser.parse(hospitalBasicRaw.getHolidayStart()),
+					OpeningHourParser.parse(hospitalBasicRaw.getHolidayClose())));
 			}
 
 			return Hospital.builder()
-				.id(hospitalRaw.getId())
-				.name(hospitalRaw.getName())
-				.location(new GeoJsonPoint(hospitalRaw.getLongitude(), hospitalRaw.getLatitude()))
-				.phone(hospitalRaw.getPhone())
-				.address(hospitalRaw.getAddress())
-				.hospitalType(HospitalType.find(hospitalRaw.getType()))
+				.id(hospitalBasicRaw.getId())
+				.name(hospitalBasicRaw.getName())
+				.location(new GeoJsonPoint(hospitalBasicRaw.getLongitude(), hospitalBasicRaw.getLatitude()))
+				.phone(hospitalBasicRaw.getPhone())
+				.address(hospitalBasicRaw.getAddress())
+				.hospitalType(HospitalType.find(hospitalBasicRaw.getType()))
 				.days(days)
 				.build();
 		} catch (Exception e) {
-			log.error("[FAIL TO MIGRATION] {} {}", hospitalRaw.getId(), e.getMessage());
+			log.error("[FAIL TO MIGRATION] {} {}", hospitalBasicRaw.getId(), e.getMessage());
 			return null;
 		}
 	}
