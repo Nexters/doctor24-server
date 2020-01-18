@@ -42,7 +42,7 @@ public class JobConfig {
 	@Bean
 	public Step hospitalStep(StepBuilderFactory stepBuilderFactory) {
 		return stepBuilderFactory.get("hospitalStep")
-			.<List<HospitalRaw>, List<Hospital>>chunk(10)
+			.<List<HospitalRaw>, List<Hospital>>chunk(1)
 			.reader(hospitalReader)
 			.processor(hospitalProcessor)
 			.writer(hospitalWriter)

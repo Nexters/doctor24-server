@@ -26,7 +26,7 @@ class JobConfigTest {
 		.toJobParameters();
 
 	@Test
-	void name() throws Exception {
+	void 병원_전체_배치() throws Exception {
 		JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
 
 		assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);

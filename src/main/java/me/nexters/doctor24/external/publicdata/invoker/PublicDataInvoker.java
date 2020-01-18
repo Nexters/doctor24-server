@@ -13,6 +13,8 @@ import me.nexters.doctor24.common.page.PageRequest;
 import me.nexters.doctor24.common.page.PageResponse;
 import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.hospital.model.HospitalResponse;
+import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
+import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailResponse;
 import me.nexters.doctor24.medical.hospital.repository.HospitalInquires;
 import me.nexters.doctor24.medical.pharmacy.model.PharmacyRaw;
 import me.nexters.doctor24.medical.pharmacy.model.PharmacyResponse;
@@ -41,6 +43,14 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
 		HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
 
 		return PageResponse.of(response.getHospitals(), pageRequest);
+	}
+
+	@Override
+	public HospitalDetailRaw getHospitalDetailPage(String hospitalId) {
+		String xmlResult = hospitalInvoker.getHospitalDetails(key, hospitalId).block();
+		HospitalDetailResponse response = toObjectFromResponse(xmlResult, HospitalDetailResponse.class);
+
+		return response.getHospitalDetail();
 	}
 
 	@Override
