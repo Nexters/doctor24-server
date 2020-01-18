@@ -3,12 +3,6 @@ spring:
 
 logging:
   config: classpath:log/log4j2-local.xml
-
-route:
-  #prefix: dev
-  #필터링 정보
-  filter:
-
 ---
 spring:
   profiles: dev
