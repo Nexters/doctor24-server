@@ -19,6 +19,7 @@ import me.nexters.doctor24.common.page.PageResponse;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.hospital.model.HospitalType;
+import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.hospital.repository.HospitalInquires;
 import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
@@ -38,6 +39,14 @@ class HospitalRawInquiresTest {
 		PageResponse<HospitalRaw> hospitalPage =
 			hospitalInquires.getHospitalPage(PageRequest.of(2, 100));
 		assertThat(hospitalPage.getContents().size(), is(100));
+	}
+
+	@Test
+	void 병원_상세_조회() {
+		HospitalDetailRaw hospitalDetailRaw = hospitalInquires.getHospitalDetailPage("A1119600");
+
+		assertThat(hospitalDetailRaw.getCategories(), is("내과,비뇨기과,성형외과,소아청소년과,피부과"));
+		System.out.println(hospitalDetailRaw);
 	}
 
 	@Test
