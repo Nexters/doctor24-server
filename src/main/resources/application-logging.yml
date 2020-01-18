@@ -1,0 +1,25 @@
+spring:
+  profiles: local
+
+logging:
+  config: classpath:log/log4j2-local.xml
+
+route:
+  #prefix: dev
+  #필터링 정보
+  filter:
+
+---
+spring:
+  profiles: dev
+
+
+logging:
+  config: classpath:log/log4j2-test.xml
+
+---
+spring:
+  profiles: real
+
+logging:
+  config: classpath:log/log4j2-release.xml

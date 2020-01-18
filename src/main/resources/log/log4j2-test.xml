@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="info">
+	<xi:include href="path/log4j2-path.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<xi:include href="common/log4j2-common-appenders-test.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<xi:include href="common/log4j2-common-loggers-test.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</Configuration>
