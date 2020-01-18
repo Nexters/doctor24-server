@@ -50,12 +50,7 @@ public class MedicalController {
 			throw new UnsupportedOperationException("현재는 HOSPITAL 타입만 지원 합니다");
 		}
 		// medicalType에 따른 처리 해야함
-		if (operatingHoursFilterWrapper.getOperatingHours() == null) {
-			return hospitalService.getFacilitiesWithinRange(Double.parseDouble(latitude),
-				Double.parseDouble(longitude));
-		}
-
 		return hospitalService.getFacilitiesWithinRangeWithFiltering(Double.parseDouble(latitude),
-			Double.parseDouble(longitude), operatingHoursFilterWrapper.toDay());
+			Double.parseDouble(longitude), operatingHoursFilterWrapper.getDay());
 	}
 }
