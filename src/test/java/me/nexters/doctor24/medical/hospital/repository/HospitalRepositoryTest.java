@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
@@ -58,7 +60,7 @@ class HospitalRepositoryTest {
 	void 근접_지점_검색() {
 		Point point = new Point(127.0395873429168, 37.485612179925724);
 		Distance distance = new Distance(0.5, Metrics.KILOMETERS);
-		hospitalRepository.findByLocationNear(point, distance)
+		hospitalRepository.findByLocationNear(point, distance, PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "location")))
 			.subscribe(System.out::println);
 	}
 }
