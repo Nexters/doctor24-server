@@ -18,11 +18,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import me.nexters.doctor24.medical.MedicalAggregatorProxy;
 import me.nexters.doctor24.medical.api.request.filter.OperatingHoursFilterWrapper;
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.api.type.SwaggerApiTag;
-import me.nexters.doctor24.medical.hospital.service.HospitalService;
 import reactor.core.publisher.Flux;
 
 /**
@@ -33,7 +33,7 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/api/v1/medicals/{type}")
 public class MedicalController {
-	private final HospitalService hospitalService;
+	private final MedicalAggregatorProxy aggregatorProxy;
 
 	@Operation(summary = "특정 위치에 반경 500m 안에 특정 카테고리(병원, 약국, 동물병원) 의료 서비스 목륵을 제공한다",
 		description = "search medical service by interfaceId",
@@ -46,11 +46,7 @@ public class MedicalController {
 	public Flux<FacilityResponse> getFacilities(
 		@PathVariable MedicalType type, @RequestParam String latitude, @RequestParam String longitude,
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
-		if (type != MedicalType.hospital) {
-			throw new UnsupportedOperationException("현재는 HOSPITAL 타입만 지원 합니다");
-		}
-		// medicalType에 따른 처리 해야함
-		return hospitalService.getFacilitiesWithinRangeWithFiltering(Double.parseDouble(latitude),
+		return aggregatorProxy.getFacilitiesFilteringByDay(type, Double.parseDouble(latitude),
 			Double.parseDouble(longitude), operatingHoursFilterWrapper.getDay());
 	}
 }
