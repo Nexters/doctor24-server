@@ -1,5 +1,6 @@
 package me.nexters.doctor24.medical.hospital.model.mongo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
@@ -27,6 +28,5 @@ public class Hospital {
 	private HospitalType hospitalType;
 	private String phone;
 	private List<String> categories;
-
-	// TODO 필요한 정보 더 로드할 예정
+	private LocalDateTime rowWriteDate;
 }
