@@ -20,6 +20,9 @@ import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 @NoArgsConstructor
 @Builder
 public class FacilityResponse {
+	@Schema(description = "고유 아이디")
+	private String id;
+
 	@Schema(description = "지점 이름")
 	private String name;
 
@@ -43,6 +46,7 @@ public class FacilityResponse {
 
 	public static FacilityResponse fromHospital(Hospital hospital) {
 		return FacilityResponse.builder()
+			.id(hospital.getId())
 			.name(hospital.getName())
 			.address(hospital.getAddress())
 			.days(hospital.getDays())
@@ -55,6 +59,7 @@ public class FacilityResponse {
 
 	public static FacilityResponse fromPharmacy(Pharmacy pharmacy) {
 		return FacilityResponse.builder()
+			.id(pharmacy.getId())
 			.name(pharmacy.getName())
 			.address(pharmacy.getAddress())
 			.days(pharmacy.getDays())
