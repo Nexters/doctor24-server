@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
+import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 
 /**
  * @author manki.kim
@@ -40,7 +41,7 @@ public class FacilityResponse {
 	@Schema(description = "주소")
 	private String address;
 
-	public static FacilityResponse from(Hospital hospital) {
+	public static FacilityResponse fromHospital(Hospital hospital) {
 		return FacilityResponse.builder()
 			.name(hospital.getName())
 			.address(hospital.getAddress())
@@ -49,6 +50,18 @@ public class FacilityResponse {
 			.latitude(hospital.getLocation().getY())
 			.medicalType(MedicalType.hospital)
 			.phone(hospital.getPhone())
+			.build();
+	}
+
+	public static FacilityResponse fromPharmacy(Pharmacy pharmacy) {
+		return FacilityResponse.builder()
+			.name(pharmacy.getName())
+			.address(pharmacy.getAddress())
+			.days(pharmacy.getDays())
+			.longitude(pharmacy.getLocation().getX())
+			.latitude(pharmacy.getLocation().getY())
+			.medicalType(MedicalType.pharmacy)
+			.phone(pharmacy.getPhone())
 			.build();
 	}
 }

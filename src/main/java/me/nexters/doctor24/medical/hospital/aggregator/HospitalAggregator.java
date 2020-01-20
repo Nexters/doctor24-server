@@ -43,6 +43,6 @@ public class HospitalAggregator implements MedicalAggregator {
 	public Flux<FacilityResponse> getFacilitiesFilteringByDay(double latitude, double longitude, Day requestDay) {
 		return getHospitalFlux(latitude, longitude, PAGE_COUNT_WITH_FILTERING)
 			.filter(hospital -> hospital.isOpen(requestDay))
-			.map(FacilityResponse::from);
+			.map(FacilityResponse::fromHospital);
 	}
 }
