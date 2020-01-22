@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
@@ -27,11 +28,18 @@ public class MedicalAggregatorProxy {
 			.collect(Collectors.toMap(MedicalAggregator::type, Function.identity()));
 	}
 
-	public Flux<FacilityResponse> getFacilitiesFilteringByDay(MedicalType type, double latitude, double longitude,
-		Day requestDay) {
+	public Flux<FacilityResponse> getFacilitiesBy(MedicalType type, double latitude, double longitude,
+		String category, Day requestDay) {
 		return Optional.ofNullable(aggregatorMap.get(type))
-			.map(aggregator -> aggregator.getFacilitiesFilteringByDay(latitude, longitude, requestDay))
+			.map(aggregator -> getFacilitiesByConditions(aggregator, latitude, longitude, category, requestDay))
 			.orElseThrow(
 				() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "지원 하지 않는 medical type 입니다 " + type));
+	}
+
+	private Flux<FacilityResponse> getFacilitiesByConditions(MedicalAggregator aggregator, double latitude,
+		double longitude, String category, Day requestDay) {
+		return !StringUtils.isEmpty(category) ?
+			aggregator.getFacilitiesFilteringByCategoryAndDay(latitude, longitude, category, requestDay)
+			: aggregator.getFacilitiesFilteringByDay(latitude, longitude, requestDay);
 	}
 }

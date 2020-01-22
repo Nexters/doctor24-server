@@ -44,9 +44,11 @@ public class MedicalController {
 		@Schema(implementation = FacilityResponse.class)))})
 	@GetMapping(value = "/facilities")
 	public Flux<FacilityResponse> getFacilities(
-		@PathVariable MedicalType type, @RequestParam String latitude, @RequestParam String longitude,
+		@PathVariable MedicalType type, @RequestParam String latitude,
+		@RequestParam String longitude,
+		@RequestParam(required = false) String category,
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
-		return aggregatorProxy.getFacilitiesFilteringByDay(type, Double.parseDouble(latitude),
-			Double.parseDouble(longitude), operatingHoursFilterWrapper.getDay());
+		return aggregatorProxy.getFacilitiesBy(type, Double.parseDouble(latitude),
+			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay());
 	}
 }

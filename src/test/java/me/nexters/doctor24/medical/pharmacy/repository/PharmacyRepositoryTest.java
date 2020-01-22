@@ -32,13 +32,13 @@ class PharmacyRepositoryTest {
 		Pharmacy pharmacy = Pharmacy.builder()
 			.id("C1800232")
 			.days(days)
-			.latitude(36.5195854195)
-			.longitude(127.2353413861)
+			//.latitude(36.5195854195)
+			//.longitude(127.2353413861)
 			.name("고운길온누리약국")
 			.phone("070-7716-7577")
 			.build();
 
-		Pharmacy saved = pharmacyRepository.save(pharmacy);
+		Pharmacy saved = pharmacyRepository.save(pharmacy).block();
 
 		assertThat(pharmacy).isEqualTo(saved);
 	}
