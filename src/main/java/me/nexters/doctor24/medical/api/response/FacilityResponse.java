@@ -44,6 +44,9 @@ public class FacilityResponse {
 	@Schema(description = "주소")
 	private String address;
 
+	@Schema(description = "진료과목 (hospital type만 존재)")
+	private List<String> categories;
+
 	public static FacilityResponse fromHospital(Hospital hospital) {
 		return FacilityResponse.builder()
 			.id(hospital.getId())
@@ -54,6 +57,7 @@ public class FacilityResponse {
 			.latitude(hospital.getLocation().getY())
 			.medicalType(MedicalType.hospital)
 			.phone(hospital.getPhone())
+			.categories(hospital.getCategories())
 			.build();
 	}
 

@@ -40,4 +40,10 @@ public class PharmacyAggregator implements MedicalAggregator {
 			PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, "location")))
 			.map(FacilityResponse::fromPharmacy);
 	}
+
+	@Override
+	public Flux<FacilityResponse> getFacilitiesFilteringByCategoryAndDay(double latitude, double longitude,
+		String category, Day requestDay) {
+		throw new UnsupportedOperationException("not support category filtering about pharmacy type");
+	}
 }
