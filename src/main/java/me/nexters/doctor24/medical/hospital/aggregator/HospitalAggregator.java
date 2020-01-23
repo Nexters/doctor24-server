@@ -36,6 +36,7 @@ public class HospitalAggregator implements MedicalAggregator {
 		return hospitalRepository.findByLocationNear(new Point(longitude, latitude),
 			new Distance(DEFAULT_DISTANCE, Metrics.KILOMETERS),
 			PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(FacilityResponse::fromHospital);
 	}
 
@@ -45,6 +46,7 @@ public class HospitalAggregator implements MedicalAggregator {
 		return hospitalRepository.findByLocationNearAndCategories(new Point(longitude, latitude),
 			new Distance(DEFAULT_DISTANCE, Metrics.KILOMETERS), category,
 			PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(FacilityResponse::fromHospital);
 	}
 }
