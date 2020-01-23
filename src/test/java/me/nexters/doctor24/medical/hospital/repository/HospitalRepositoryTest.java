@@ -2,6 +2,7 @@ package me.nexters.doctor24.medical.hospital.repository;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -47,6 +48,7 @@ class HospitalRepositoryTest {
 			.address("서울특별시 강남구 봉은사로 612 (삼성동)")
 			.phone("02-2222-4888")
 			.location(location)
+			.rowWriteDate(LocalDateTime.now())
 			.build();
 
 		Hospital saved = hospitalRepository.save(hospital).block();

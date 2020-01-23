@@ -1,5 +1,6 @@
 package me.nexters.doctor24.batch.processor.util;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,14 +9,13 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import lombok.experimental.UtilityClass;
 import me.nexters.doctor24.medical.common.Day;
-import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
 import me.nexters.doctor24.medical.hospital.model.HospitalType;
-import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
+import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 
 @UtilityClass
 public class HospitalParser {
-	public static Hospital parse(HospitalBasicRaw hospitalBasicRaw, HospitalDetailRaw hospitalDetailRaw) {
+	public static Hospital parse(HospitalBasicRaw hospitalBasicRaw) {
 		List<Day> days = extractDays(hospitalBasicRaw);
 		return Hospital.builder()
 			.id(hospitalBasicRaw.getId())
@@ -25,7 +25,7 @@ public class HospitalParser {
 			.address(AddressParser.parse(hospitalBasicRaw.getAddress()))
 			.hospitalType(HospitalType.find(hospitalBasicRaw.getType()))
 			.days(days)
-			.categories(CategoryParser.parse(hospitalDetailRaw.getCategories()))
+			.rowWriteDate(LocalDateTime.now())
 			.build();
 	}
 

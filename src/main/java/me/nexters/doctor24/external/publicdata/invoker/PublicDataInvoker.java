@@ -1,5 +1,7 @@
 package me.nexters.doctor24.external.publicdata.invoker;
 
+import java.util.Optional;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,11 +48,16 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
 	}
 
 	@Override
-	public HospitalDetailRaw getHospitalDetailPage(String hospitalId) {
-		String xmlResult = hospitalInvoker.getHospitalDetails(key, hospitalId).block();
-		HospitalDetailResponse response = toObjectFromResponse(xmlResult, HospitalDetailResponse.class);
-
-		return response.getHospitalDetail();
+	public Optional<HospitalDetailRaw> getHospitalDetailPage(String hospitalId) {
+		try {
+			String xmlResult = hospitalInvoker.getHospitalDetails(key, hospitalId).block();
+			HospitalDetailResponse response = toObjectFromResponse(xmlResult, HospitalDetailResponse.class);
+			return Optional.of(response.getHospitalDetail());
+		} catch (Exception e) {
+			log.info("Exception explicitly caught: " + e.getMessage());
+			log.info("hospital detail invoke timeout (hospital ID: " + hospitalId + ")");
+			return Optional.empty();
+		}
 	}
 
 	@Override

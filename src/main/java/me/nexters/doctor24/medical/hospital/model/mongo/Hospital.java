@@ -29,4 +29,9 @@ public class Hospital {
 	private String phone;
 	private List<String> categories;
 	private LocalDateTime rowWriteDate;
+
+	public void updateCategories(List<String> categories) {
+		this.categories = categories;
+		this.rowWriteDate = LocalDateTime.now();
+	}
 }
