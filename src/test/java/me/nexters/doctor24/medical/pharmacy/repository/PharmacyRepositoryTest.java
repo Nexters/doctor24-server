@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
@@ -32,8 +33,7 @@ class PharmacyRepositoryTest {
 		Pharmacy pharmacy = Pharmacy.builder()
 			.id("C1800232")
 			.days(days)
-			//.latitude(36.5195854195)
-			//.longitude(127.2353413861)
+			.location(new GeoJsonPoint(127.2353413861, 36.5195854195))
 			.name("고운길온누리약국")
 			.phone("070-7716-7577")
 			.build();

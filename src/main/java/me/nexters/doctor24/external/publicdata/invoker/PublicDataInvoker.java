@@ -1,5 +1,7 @@
 package me.nexters.doctor24.external.publicdata.invoker;
 
+import java.util.Optional;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.nexters.doctor24.common.page.PageRequest;
 import me.nexters.doctor24.common.page.PageResponse;
-import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
-import me.nexters.doctor24.medical.hospital.model.HospitalResponse;
+import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
+import me.nexters.doctor24.medical.hospital.model.basic.HospitalResponse;
+import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
+import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailResponse;
 import me.nexters.doctor24.medical.hospital.repository.HospitalInquires;
 import me.nexters.doctor24.medical.pharmacy.model.PharmacyRaw;
 import me.nexters.doctor24.medical.pharmacy.model.PharmacyResponse;
@@ -35,7 +39,7 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
 	private String key;
 
 	@Override
-	public PageResponse<HospitalRaw> getHospitalPage(PageRequest pageRequest) {
+	public PageResponse<HospitalBasicRaw> getHospitalPage(PageRequest pageRequest) {
 		String xmlResult = hospitalInvoker.getHospitals(key, pageRequest.getPageSafety(),
 			pageRequest.getCount()).block();
 		HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
@@ -44,7 +48,21 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
 	}
 
 	@Override
-	public PageResponse<HospitalRaw> getHospitalsByCityAndProvinceOrderBy(PageRequest pageRequest, String city, String province) {
+	public Optional<HospitalDetailRaw> getHospitalDetailPage(String hospitalId) {
+		try {
+			String xmlResult = hospitalInvoker.getHospitalDetails(key, hospitalId).block();
+			HospitalDetailResponse response = toObjectFromResponse(xmlResult, HospitalDetailResponse.class);
+			return Optional.of(response.getHospitalDetail());
+		} catch (Exception e) {
+			log.info("Exception explicitly caught: " + e.getMessage());
+			log.info("hospital detail invoke timeout (hospital ID: " + hospitalId + ")");
+			return Optional.empty();
+		}
+	}
+
+	@Override
+	public PageResponse<HospitalBasicRaw> getHospitalsByCityAndProvinceOrderBy(PageRequest pageRequest, String city,
+		String province) {
 		String xmlResult = hospitalInvoker.getHospitalsByCityAndProvinceOrderBy(key, city, province, "NAME",
 			pageRequest.getPageSafety(), pageRequest.getCount()).block();
 		HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
@@ -69,7 +87,8 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
 	}
 
 	@Override
-	public PageResponse<PharmacyRaw> getPharmacyByCityAndProvinceOrderBy(PageRequest pageRequest, String city, String province) {
+	public PageResponse<PharmacyRaw> getPharmacyByCityAndProvinceOrderBy(PageRequest pageRequest, String city,
+		String province) {
 		String xmlResult = pharmacyInvoker.getPharmaciesByCityAndProvinceOrderBy(key, city, province, "NAME",
 			pageRequest.getPageSafety(), pageRequest.getCount()).block();
 		PharmacyResponse response = toObjectFromResponse(xmlResult, PharmacyResponse.class);

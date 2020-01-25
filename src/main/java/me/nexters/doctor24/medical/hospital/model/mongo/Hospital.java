@@ -1,5 +1,6 @@
 package me.nexters.doctor24.medical.hospital.model.mongo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +29,11 @@ public class Hospital {
 	private HospitalType hospitalType;
 	private String phone;
 	private List<String> categories;
+	private LocalDateTime rowWriteDate;
 
-	// TODO 필요한 정보 더 로드할 예정
+	public void updateCategories(List<String> categories) {
+		this.categories = categories;
+		this.rowWriteDate = LocalDateTime.now();
 
 	public boolean isOpen(Day requestDay) {
 		Optional<Day> matchDayOpt = days.stream()

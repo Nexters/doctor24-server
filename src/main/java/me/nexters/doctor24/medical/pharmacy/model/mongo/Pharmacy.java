@@ -25,6 +25,4 @@ public class Pharmacy {
 	private GeoJsonPoint location;
 	private String address;
 	private String phone;
-
-	// TODO 필요한 정보 더 로드할 예정
 }
