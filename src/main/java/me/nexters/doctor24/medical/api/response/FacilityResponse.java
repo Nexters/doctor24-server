@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
+import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 
 /**
  * @author manki.kim
@@ -19,6 +20,9 @@ import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 @NoArgsConstructor
 @Builder
 public class FacilityResponse {
+	@Schema(description = "고유 아이디")
+	private String id;
+
 	@Schema(description = "지점 이름")
 	private String name;
 
@@ -40,8 +44,12 @@ public class FacilityResponse {
 	@Schema(description = "주소")
 	private String address;
 
-	public static FacilityResponse from(Hospital hospital) {
+	@Schema(description = "진료과목 (hospital type만 존재)")
+	private List<String> categories;
+
+	public static FacilityResponse fromHospital(Hospital hospital) {
 		return FacilityResponse.builder()
+			.id(hospital.getId())
 			.name(hospital.getName())
 			.address(hospital.getAddress())
 			.days(hospital.getDays())
@@ -49,6 +57,20 @@ public class FacilityResponse {
 			.latitude(hospital.getLocation().getY())
 			.medicalType(MedicalType.hospital)
 			.phone(hospital.getPhone())
+			.categories(hospital.getCategories())
+			.build();
+	}
+
+	public static FacilityResponse fromPharmacy(Pharmacy pharmacy) {
+		return FacilityResponse.builder()
+			.id(pharmacy.getId())
+			.name(pharmacy.getName())
+			.address(pharmacy.getAddress())
+			.days(pharmacy.getDays())
+			.longitude(pharmacy.getLocation().getX())
+			.latitude(pharmacy.getLocation().getY())
+			.medicalType(MedicalType.pharmacy)
+			.phone(pharmacy.getPhone())
 			.build();
 	}
 }

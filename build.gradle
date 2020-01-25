@@ -9,9 +9,14 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
     compileOnly {
         extendsFrom annotationProcessor
     }
+    compile.exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
 }
 
 repositories {
@@ -25,6 +30,7 @@ dependencyManagement {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'com.playtika.reactivefeign:feign-reactor-webclient:1.0.45'
     implementation 'com.playtika.reactivefeign:feign-reactor-spring-configuration:1.0.45'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -55,4 +61,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }

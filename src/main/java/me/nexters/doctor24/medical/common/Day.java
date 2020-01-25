@@ -24,5 +24,10 @@ public class Day {
 		SUNDAY,
 		HOLIDAY;
 	}
+
+	public boolean isInRange(LocalTime startTime, LocalTime endTime) {
+		return this.startTime.compareTo(startTime) <= 0
+			&& this.endTime.compareTo(endTime) >= 0;
+	}
 }
 

@@ -1,6 +1,7 @@
 package me.nexters.doctor24.medical.hospital.repository;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,15 +11,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.HospitalType;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @DataMongoTest
@@ -53,14 +58,26 @@ class HospitalRepositoryTest {
 
 		Hospital saved = hospitalRepository.save(hospital).block();
 
-		assertThat(hospital).isEqualTo(saved);
+		assertThat(hospital, is(saved));
 	}
 
 	@Test
 	void 근접_지점_검색() {
 		Point point = new Point(127.0395873429168, 37.485612179925724);
 		Distance distance = new Distance(0.5, Metrics.KILOMETERS);
-		hospitalRepository.findByLocationNear(point, distance)
+		hospitalRepository.findByLocationNear(point, distance,
+			PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "location")))
 			.subscribe(System.out::println);
+	}
+
+	@Test
+	void 강남역_병원_카테고리_필터링_조회() {
+		Point point = new Point(127.027599, 37.497971);
+		Distance distance = new Distance(0.5, Metrics.KILOMETERS);
+		Flux<Hospital> results =
+			hospitalRepository.findByLocationNearAndCategories(point, distance, "내과",
+				PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "location")));
+		List<Hospital> hospitals = results.collectList().block();
+		assertTrue(!CollectionUtils.isEmpty(hospitals));
 	}
 }

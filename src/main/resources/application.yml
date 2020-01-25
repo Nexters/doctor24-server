@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: local
-    include: swagger, mongo
+    include: swagger, mongo, logging
   batch:
     job:
       enabled: false
