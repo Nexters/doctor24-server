@@ -36,6 +36,7 @@ import reactor.core.publisher.Flux;
 public class MedicalController {
 	private final MedicalAggregatorProxy aggregatorProxy;
 	private final HolidayManager holidayManager;
+	private static final int LIMIT_REQUEST = 20;
 
 	@Operation(summary = "특정 위치에 반경 500m 안에 특정 카테고리(병원, 약국, 동물병원) 의료 서비스 목륵을 제공한다",
 		description = "search medical service by interfaceId",
@@ -51,7 +52,8 @@ public class MedicalController {
 		@RequestParam(required = false) String category,
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
 		return aggregatorProxy.getFacilitiesBy(type, Double.parseDouble(latitude),
-			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay(holidayManager));
+			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay(holidayManager))
+			.limitRequest(LIMIT_REQUEST);
 	}
 
 	@Operation(summary = "특정 사각형 내부에 포함된 (약국, 동물병원) 의료 서비스 목륵을 제공한다 x : 7시 지점, z : 1시 지점",
@@ -70,6 +72,7 @@ public class MedicalController {
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
 		return aggregatorProxy.getFacilitiesWithIn(type, Double.parseDouble(xlatitude),
 			Double.parseDouble(xlongitude), Double.parseDouble(zlatitude),
-			Double.parseDouble(zlongitude), category, operatingHoursFilterWrapper.getDay(holidayManager));
+			Double.parseDouble(zlongitude), category, operatingHoursFilterWrapper.getDay(holidayManager))
+			.limitRequest(LIMIT_REQUEST);
 	}
 }
