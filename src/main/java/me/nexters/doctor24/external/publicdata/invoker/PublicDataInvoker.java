@@ -1,5 +1,6 @@
 package me.nexters.doctor24.external.publicdata.invoker;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.json.JSONObject;
@@ -13,6 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.nexters.doctor24.common.page.PageRequest;
 import me.nexters.doctor24.common.page.PageResponse;
+import me.nexters.doctor24.external.publicdata.holiday.invoker.HolidayInquires;
+import me.nexters.doctor24.external.publicdata.holiday.invoker.HolidayInvoker;
+import me.nexters.doctor24.external.publicdata.holiday.model.HolidayRaw;
+import me.nexters.doctor24.external.publicdata.holiday.model.HolidayResponse;
 import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
 import me.nexters.doctor24.medical.hospital.model.basic.HospitalResponse;
 import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
@@ -30,10 +35,11 @@ import me.nexters.doctor24.support.JsonParser;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
+public class PublicDataInvoker implements HospitalInquires, PharmacyInquires, HolidayInquires {
 
 	private final HospitalInvoker hospitalInvoker;
 	private final PharmacyInvoker pharmacyInvoker;
+	private final HolidayInvoker holidayInvoker;
 
 	@Value("${hospital.key}")
 	private String key;
@@ -94,5 +100,13 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires {
 		PharmacyResponse response = toObjectFromResponse(xmlResult, PharmacyResponse.class);
 
 		return PageResponse.of(response.getPharmacies(), pageRequest);
+	}
+
+	@Override
+	public List<HolidayRaw> getHolidayRaws(int year) {
+		String xmlResult = holidayInvoker.getHoliday(key, year).block();
+		HolidayResponse response = toObjectFromResponse(xmlResult, HolidayResponse.class);
+
+		return response.getHolidayRaws();
 	}
 }

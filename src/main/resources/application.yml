@@ -8,6 +8,8 @@ spring:
 
 hospital:
   key: 9jkqLh1hLcKTDDzsOi%2FtwtxbpUBvzmE7TkZuW019x%2BvmUeAeU%2BBUqQMUfvu1QcBpo%2Bhr45T3s%2FysWNu%2FM6goLA%3D%3D
+holiday:
+  key: 9jkqLh1hLcKTDDzsOi%2FtwtxbpUBvzmE7TkZuW019x%2BvmUeAeU%2BBUqQMUfvu1QcBpo%2Bhr45T3s%2FysWNu%2FM6goLA%3D%3D
 
 server:
   port: 8080

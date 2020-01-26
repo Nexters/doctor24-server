@@ -1,5 +1,6 @@
 package me.nexters.doctor24.medical.api.request.filter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -10,6 +11,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import lombok.Data;
 import me.nexters.doctor24.medical.common.Day;
+import me.nexters.doctor24.medical.holiday.HolidayManager;
 
 /**
  * @author manki.kim
@@ -19,8 +21,12 @@ public class OperatingHoursFilterWrapper {
 	@Valid
 	private OperatingHours operatingHours;
 
-	public Day getDay() {
-		return operatingHours == null ? currentTimeDay() : toDay();
+	public Day getDay(HolidayManager holidayManager) {
+		Day requestDay = operatingHours == null ? currentTimeDay() : toDay();
+		if (!holidayManager.isHoliday(LocalDate.now())) {
+			return requestDay;
+		}
+		return Day.of(Day.DayType.HOLIDAY, requestDay.getStartTime(), requestDay.getEndTime());
 	}
 
 	private Day toDay() {
