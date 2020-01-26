@@ -42,13 +42,32 @@ public class MedicalController {
 		@ApiResponse(responseCode = "404", description = "NOT FOUND"),
 		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema =
 		@Schema(implementation = FacilityResponse.class)))})
-	@GetMapping(value = "/facilities")
+	@GetMapping(value = "/latitudes/{latitude}/longitudes/{longitude}/facilities")
 	public Flux<FacilityResponse> getFacilities(
-		@PathVariable MedicalType type, @RequestParam String latitude,
-		@RequestParam String longitude,
+		@PathVariable MedicalType type, @PathVariable String latitude,
+		@PathVariable String longitude,
 		@RequestParam(required = false) String category,
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
 		return aggregatorProxy.getFacilitiesBy(type, Double.parseDouble(latitude),
 			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay());
+	}
+
+	@Operation(summary = "특정 사각형 내부에 포함된 (약국, 동물병원) 의료 서비스 목륵을 제공한다",
+		description = "search medical service by interfaceId",
+		tags = {SwaggerApiTag.MEDICAL})
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "404", description = "NOT FOUND"),
+		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema =
+		@Schema(implementation = FacilityResponse.class)))})
+	@GetMapping(value = "/xlatitudes/{xlatitude}/xlongitudes/{xlongitude}/zlatitudes/{zlatitude}/zlongitudes"
+		+ "/{zlongitude}/facilities")
+	public Flux<FacilityResponse> getFacilitiesWithIn(
+		@PathVariable MedicalType type, @PathVariable String xlatitude,
+		@PathVariable String xlongitude, @PathVariable String zlatitude, @PathVariable String zlongitude,
+		@RequestParam(required = false) String category,
+		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
+		return aggregatorProxy.getFacilitiesWithIn(type, Double.parseDouble(xlatitude),
+			Double.parseDouble(xlongitude), Double.parseDouble(zlatitude),
+			Double.parseDouble(zlongitude), category, operatingHoursFilterWrapper.getDay());
 	}
 }
