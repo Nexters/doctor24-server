@@ -17,9 +17,9 @@ public class PolygonFactory {
 	public static Polygon getByXZPoints(Point x, Point z) {
 		List<Point> points = new ArrayList<>();
 		points.add(x);
-		points.add(new Point(z.getX(), x.getY()));
-		points.add(z);
 		points.add(new Point(x.getX(), z.getY()));
+		points.add(z);
+		points.add(new Point(z.getX(), x.getY()));
 		points.add(x);
 		return new Polygon(points);
 	}
