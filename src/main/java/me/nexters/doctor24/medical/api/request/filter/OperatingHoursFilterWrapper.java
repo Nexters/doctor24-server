@@ -31,7 +31,8 @@ public class OperatingHoursFilterWrapper {
 
 	private Day toDay() {
 		try {
-			return Day.of(operatingHours.getDay(), operatingHours.startTimeToLocalTime(),
+			return Day.of(Day.DayType.valueOf(LocalDate.now().getDayOfWeek().name()),
+				operatingHours.startTimeToLocalTime(),
 				operatingHours.endTimeToLocalTime());
 		} catch (DateTimeParseException e) {
 			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "date time parsing error " + operatingHours);
