@@ -14,7 +14,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PolygonFactory {
 
-	public Polygon getByXZPoints(Point x, Point z) {
+	public static Polygon getByXZPoints(Point x, Point z) {
 		List<Point> points = new ArrayList<>();
 		points.add(x);
 		points.add(new Point(z.getX(), x.getY()));
