@@ -14,6 +14,7 @@ import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
+import me.nexters.doctor24.support.PolygonFactory;
 import reactor.core.publisher.Flux;
 
 @Service
@@ -46,6 +47,17 @@ public class HospitalAggregator implements MedicalAggregator {
 		return hospitalRepository.findByLocationNearAndCategories(new Point(longitude, latitude),
 			new Distance(DEFAULT_DISTANCE, Metrics.KILOMETERS), category,
 			PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			.filter(hospital -> hospital.isOpen(requestDay))
+			.map(FacilityResponse::fromHospital);
+	}
+
+	@Override
+	public Flux<FacilityResponse> getFacilitiesWithIn(double xlatitude, double xlongitude, double zlatitude,
+		double zlongitude, Day requestDay) {
+		return hospitalRepository
+			.findByLocationWithin(
+				PolygonFactory.getByXZPoints(new Point(xlongitude, xlatitude), new Point(zlongitude, zlatitude)),
+				PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
 			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(FacilityResponse::fromHospital);
 	}
