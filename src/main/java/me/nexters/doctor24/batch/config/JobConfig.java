@@ -25,13 +25,18 @@ import me.nexters.doctor24.batch.config.listener.HospitalStepListener;
 import me.nexters.doctor24.batch.processor.HospitalDetailFailureProcessor;
 import me.nexters.doctor24.batch.processor.HospitalDetailProcessor;
 import me.nexters.doctor24.batch.processor.HospitalProcessor;
+import me.nexters.doctor24.batch.processor.PharmacyProcessor;
 import me.nexters.doctor24.batch.reader.HospitalDetailFailureReader;
 import me.nexters.doctor24.batch.reader.HospitalReader;
+import me.nexters.doctor24.batch.reader.PharmacyReader;
 import me.nexters.doctor24.batch.writer.HospitalDetailFailureWriter;
 import me.nexters.doctor24.batch.writer.HospitalDetailWriter;
 import me.nexters.doctor24.batch.writer.HospitalWriter;
+import me.nexters.doctor24.batch.writer.PharmacyWriter;
 import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
+import me.nexters.doctor24.medical.pharmacy.model.PharmacyRaw;
+import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 
 @Configuration
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -49,6 +54,9 @@ public class JobConfig {
 	private final HospitalDetailStepListener hospitalDetailStepListener;
 	private final HospitalStepListener hospitalStepListener;
 	private final HospitalDetailFailureStepListener hospitalDetailFailureStepListener;
+	private final PharmacyReader pharmacyReader;
+	private final PharmacyProcessor pharmacyProcessor;
+	private final PharmacyWriter pharmacyWriter;
 
 	@Bean
 	public JobBuilderFactory jobBuilderFactory() {
@@ -57,12 +65,13 @@ public class JobConfig {
 
 	@Bean
 	public Job medicalJob(JobBuilderFactory jobBuilderFactory, Step hospitalStep,
-		Step hospitalDetailStep, Step hospitalDetailFailureStep) {
+		Step hospitalDetailStep, Step hospitalDetailFailureStep, Step pharmacyStep) {
 		return jobBuilderFactory.get("medicalJob")
 			.preventRestart()
 			.start(hospitalStep)
-			.next(hospitalDetailStep)
-			.next(hospitalDetailFailureStep)
+				.next(hospitalDetailStep)
+				.next(hospitalDetailFailureStep)
+				.next(pharmacyStep)
 			.build();
 	}
 
@@ -96,6 +105,16 @@ public class JobConfig {
 			.processor(hospitalDetailFailureProcessor)
 			.writer(hospitalDetailFailureWriter)
 			.listener(hospitalDetailFailureStepListener)
+			.build();
+	}
+
+	@Bean
+	public Step pharmacyStep(StepBuilderFactory stepBuilderFactory) {
+		return stepBuilderFactory.get("pharmacyStep")
+			.<List<PharmacyRaw>, List<Pharmacy>>chunk(1)
+			.reader(pharmacyReader)
+			.processor(pharmacyProcessor)
+			.writer(pharmacyWriter)
 			.build();
 	}
 

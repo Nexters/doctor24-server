@@ -20,9 +20,9 @@ public class HospitalWriter implements ItemWriter<List<Hospital>> {
 	public void write(List<? extends List<Hospital>> items) {
 		items.forEach(
 			hospitals -> hospitals
-				.forEach(item -> {
-					if (Objects.nonNull(item)) {
-						hospitalRepository.save(item).block();
+				.forEach(hospital -> {
+					if (Objects.nonNull(hospital)) {
+						hospitalRepository.save(hospital).block();
 					}
 				})
 		);
