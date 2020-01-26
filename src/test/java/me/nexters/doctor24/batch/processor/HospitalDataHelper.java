@@ -2,6 +2,7 @@ package me.nexters.doctor24.batch.processor;
 
 import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
 import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
+import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 
 public class HospitalDataHelper {
 	public static HospitalBasicRaw createHospitalBasicRaw() {
@@ -37,5 +38,11 @@ public class HospitalDataHelper {
 		hospitalDetailRaw.setId("A1100141");
 		hospitalDetailRaw.setCategories("내과,비뇨기과,성형외과,소아청소년과,피부과");
 		return hospitalDetailRaw;
+	}
+
+	public static Hospital createHospitalWithoutCategories() {
+		return Hospital.builder()
+			.id("A1100141")
+			.build();
 	}
 }

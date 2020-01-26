@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,7 +60,7 @@ class HospitalBasicRawInquiresTest {
 		assertThat(hospitalsByCityAndProvinceOrderBy.getContents().size(), is(100));
 	}
 
-	//@Test
+	@Ignore
 	void 병원_전체_목록_마이그레이션() {
 		PageResponse<HospitalBasicRaw> hospitalPage =
 			hospitalInquires.getHospitalPage(PageRequest.of(1, 250));

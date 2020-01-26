@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -23,7 +23,7 @@ public class PharmacyRawInqueriesTest {
 	@Autowired
 	private PharmacyInquires pharmacyInquires;
 
-	@Test
+	@Ignore
 	void 약국_전체_목록_마이그레이션() {
 		PageResponse<PharmacyRaw> pharmacyPage = pharmacyInquires.getPharmacyPage(PageRequest.of(1, 250));
 
