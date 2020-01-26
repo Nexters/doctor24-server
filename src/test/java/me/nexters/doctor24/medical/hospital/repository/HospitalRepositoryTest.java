@@ -74,9 +74,9 @@ class HospitalRepositoryTest {
 	@Test
 	void polygon_type_검색() {
 		Point x = new Point(127.025365, 37.498821);
-		Point y = new Point(127.024475, 37.500392);
+		Point y = new Point(127.028380, 37.498821);
 		Point z = new Point(127.028380, 37.501213);
-		Point w = new Point(127.029263, 37.499707);
+		Point w = new Point(127.025365, 37.501213);
 		Point other = new Point(127.025365, 37.498821);
 		Polygon polygon = new Polygon(x, y, z, w, other);
 		hospitalRepository.findByLocationWithin(polygon,

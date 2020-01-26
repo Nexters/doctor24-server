@@ -1,5 +1,7 @@
 package me.nexters.doctor24.medical;
 
+import org.springframework.data.geo.Polygon;
+
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
@@ -19,6 +21,5 @@ public interface MedicalAggregator {
 	Flux<FacilityResponse> getFacilitiesFilteringByCategoryAndDay(double latitude, double longitude,
 		String category, Day requestDay);
 
-	Flux<FacilityResponse> getFacilitiesWithIn(double xlatitude, double xlongitude, double zlatitude,
-		double zlongitude, Day requestDay);
+	Flux<FacilityResponse> getFacilitiesWithIn(Polygon polygon, Day requestDay);
 }
