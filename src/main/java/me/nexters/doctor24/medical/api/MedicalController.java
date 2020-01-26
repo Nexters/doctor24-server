@@ -52,7 +52,7 @@ public class MedicalController {
 			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay());
 	}
 
-	@Operation(summary = "특정 사각형 내부에 포함된 (약국, 동물병원) 의료 서비스 목륵을 제공한다",
+	@Operation(summary = "특정 사각형 내부에 포함된 (약국, 동물병원) 의료 서비스 목륵을 제공한다 x : 7시 지점, z : 1시 지점",
 		description = "search medical service by interfaceId",
 		tags = {SwaggerApiTag.MEDICAL})
 	@ApiResponses(value = {
