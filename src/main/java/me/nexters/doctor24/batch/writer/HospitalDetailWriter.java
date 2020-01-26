@@ -1,7 +1,6 @@
 package me.nexters.doctor24.batch.writer;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,9 @@ import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HospitalDetailWriter implements ItemWriter<Hospital> {
 	private final HospitalRepository hospitalRepository;
-	private AtomicInteger counter = new AtomicInteger();
 
 	@Override
 	public void write(List<? extends Hospital> items) {
-		log.info("디비 write 수행 횟수 : " + counter.getAndIncrement());
 		items.forEach(hospital -> hospitalRepository.save(hospital).block());
 	}
 }

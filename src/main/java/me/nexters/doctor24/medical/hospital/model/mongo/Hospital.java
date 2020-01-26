@@ -34,6 +34,7 @@ public class Hospital {
 	public void updateCategories(List<String> categories) {
 		this.categories = categories;
 		this.rowWriteDate = LocalDateTime.now();
+	}
 
 	public boolean isOpen(Day requestDay) {
 		Optional<Day> matchDayOpt = days.stream()
