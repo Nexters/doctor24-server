@@ -11,13 +11,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import me.nexters.doctor24.medical.common.Day;
+import me.nexters.doctor24.medical.filter.DayFilterTemplate;
 
 @Getter
 @ToString
 @Builder
 @EqualsAndHashCode(of = "id")
 @Document(collection = "pharmacy")
-public class Pharmacy {
+public class Pharmacy implements DayFilterTemplate {
 	@MongoId
 	private String id;
 	private String name;

@@ -2,7 +2,6 @@ package me.nexters.doctor24.medical.hospital.model.mongo;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,13 +11,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import me.nexters.doctor24.medical.common.Day;
+import me.nexters.doctor24.medical.filter.DayFilterTemplate;
 import me.nexters.doctor24.medical.hospital.model.HospitalType;
 
 @Getter
 @ToString
 @Builder
 @Document(collection = "hospital")
-public class Hospital {
+public class Hospital implements DayFilterTemplate {
 	@MongoId
 	private String id;
 	private String name;
@@ -34,17 +34,5 @@ public class Hospital {
 	public void updateCategories(List<String> categories) {
 		this.categories = categories;
 		this.rowWriteDate = LocalDateTime.now();
-	}
-
-	public boolean isOpen(Day requestDay) {
-		Optional<Day> matchDayOpt = days.stream()
-			.filter(day -> day.getDayType() == requestDay.getDayType())
-			.findAny();
-		if (matchDayOpt.isEmpty()) {
-			return false;
-		}
-
-		Day matchDay = matchDayOpt.get();
-		return matchDay.isInRange(requestDay.getStartTime(), requestDay.getEndTime());
 	}
 }
