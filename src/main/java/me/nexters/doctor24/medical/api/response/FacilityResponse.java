@@ -1,12 +1,15 @@
 package me.nexters.doctor24.medical.api.response;
 
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
@@ -20,6 +23,8 @@ import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 @NoArgsConstructor
 @Builder
 public class FacilityResponse {
+	private static final LocalTime NIGHT_TIME_SERVE = LocalTime.of(20, 0);
+
 	@Schema(description = "고유 아이디")
 	private String id;
 
@@ -34,6 +39,10 @@ public class FacilityResponse {
 
 	@Schema(description = "의료 서비스 카테고리")
 	private MedicalType medicalType;
+
+	@With
+	@Schema(description = "야간 진료 유무")
+	private boolean isNightTimeServe;
 
 	@Schema(description = "운영시간")
 	private List<Day> days;
@@ -72,5 +81,16 @@ public class FacilityResponse {
 			.medicalType(MedicalType.pharmacy)
 			.phone(pharmacy.getPhone())
 			.build();
+	}
+
+	public FacilityResponse markNightTimeServe(Day requestDay) {
+		Optional<Day> targetDay = days.stream()
+			.filter(day -> day.isEqual(requestDay)).findFirst();
+		if (targetDay.isEmpty()) {
+			// target date 이 없을 경우 야간 진료는 없는 것으로 한다.
+			return this.withNightTimeServe(false);
+		}
+		return targetDay.get().getEndTime().isBefore(NIGHT_TIME_SERVE) ?
+			this.withNightTimeServe(false) : this.withNightTimeServe(true);
 	}
 }

@@ -39,6 +39,8 @@ public class MedicalAggregatorProxy {
 			.map(aggregator -> aggregator.getFacilitiesWithIn(
 				PolygonFactory.getByXZPoints(new Point(xlongitude, xlatitude), new Point(zlongitude, zlatitude)),
 				requestDay))
+			.map(facilityResponseFlux -> facilityResponseFlux
+				.map(facilityResponse -> facilityResponse.markNightTimeServe(requestDay)))
 			.orElseThrow(
 				() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "지원 하지 않는 medical type 입니다 " + type))
 			.limitRequest(LIMIT_REQUEST));
@@ -48,6 +50,8 @@ public class MedicalAggregatorProxy {
 		String category, Day requestDay) {
 		return convertFrom(Optional.ofNullable(aggregatorMap.get(type))
 			.map(aggregator -> getFacilitiesByConditions(aggregator, latitude, longitude, category, requestDay))
+			.map(facilityResponseFlux -> facilityResponseFlux
+				.map(facilityResponse -> facilityResponse.markNightTimeServe(requestDay)))
 			.orElseThrow(
 				() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "지원 하지 않는 medical type 입니다 " + type))
 			.limitRequest(LIMIT_REQUEST));
