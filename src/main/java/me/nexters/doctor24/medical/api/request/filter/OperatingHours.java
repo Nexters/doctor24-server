@@ -3,20 +3,15 @@ package me.nexters.doctor24.medical.api.request.filter;
 import java.time.LocalTime;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import me.nexters.doctor24.medical.common.Day;
 
 /**
  * @author manki.kim
  */
 @Data
 public class OperatingHours {
-	@Schema(description = "날짜", example = "MONDAY, TUESDAY...")
-	@NotNull
-	private Day.DayType day;
 	@Schema(description = "기관 오픈 시간", example = "10:00:00")
 	@NotEmpty
 	private String startTime;

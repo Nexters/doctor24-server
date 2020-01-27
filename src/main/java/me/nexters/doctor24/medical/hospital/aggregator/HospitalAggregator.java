@@ -22,7 +22,7 @@ import reactor.core.publisher.Flux;
 public class HospitalAggregator implements MedicalAggregator {
 
 	private static final double DEFAULT_DISTANCE = 0.5;
-	private static final int PAGE_COUNT_WITH_FILTERING = 30;
+	private static final int PAGE_COUNT_WITH_FILTERING = 60;
 	private static final String LOCATION_FILED = "location";
 
 	private final HospitalRepository hospitalRepository;
