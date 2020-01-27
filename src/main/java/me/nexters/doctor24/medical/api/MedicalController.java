@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterStyle;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.medical.MedicalAggregatorProxy;
 import me.nexters.doctor24.medical.api.request.filter.OperatingHoursFilterWrapper;
 import me.nexters.doctor24.medical.api.response.FacilitiesResponse;
-import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.api.type.SwaggerApiTag;
 import me.nexters.doctor24.medical.holiday.HolidayManager;
@@ -43,8 +40,7 @@ public class MedicalController {
 		tags = {SwaggerApiTag.MEDICAL})
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "404", description = "NOT FOUND"),
-		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema =
-		@Schema(implementation = FacilityResponse.class)))})
+		@ApiResponse(responseCode = "200", description = "successful operation")})
 	@GetMapping(value = "/latitudes/{latitude}/longitudes/{longitude}/facilities")
 	public Flux<FacilitiesResponse> getFacilities(
 		@PathVariable MedicalType type, @PathVariable String latitude,
@@ -60,8 +56,7 @@ public class MedicalController {
 		tags = {SwaggerApiTag.MEDICAL})
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "404", description = "NOT FOUND"),
-		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema =
-		@Schema(implementation = FacilityResponse.class)))})
+		@ApiResponse(responseCode = "200", description = "successful operation")})
 	@GetMapping(value = "/xlatitudes/{xlatitude}/xlongitudes/{xlongitude}/zlatitudes/{zlatitude}/zlongitudes"
 		+ "/{zlongitude}/facilities")
 	public Flux<FacilitiesResponse> getFacilitiesWithIn(
