@@ -35,6 +35,9 @@ public class FacilityResponse {
 	@Schema(description = "의료 서비스 카테고리")
 	private MedicalType medicalType;
 
+	@Schema(description = "야간 진료 유무")
+	private boolean isNightTimeServe;
+
 	@Schema(description = "운영시간")
 	private List<Day> days;
 

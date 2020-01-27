@@ -29,5 +29,9 @@ public class Day {
 		return this.startTime.compareTo(startTime) <= 0
 			&& this.endTime.compareTo(endTime) >= 0;
 	}
+
+	public boolean isEqual(Day day) {
+		return this.dayType == day.dayType;
+	}
 }
 
