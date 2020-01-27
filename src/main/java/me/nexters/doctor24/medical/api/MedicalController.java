@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.medical.MedicalAggregatorProxy;
 import me.nexters.doctor24.medical.api.request.filter.OperatingHoursFilterWrapper;
+import me.nexters.doctor24.medical.api.response.FacilitiesResponse;
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.api.type.SwaggerApiTag;
@@ -36,7 +37,6 @@ import reactor.core.publisher.Flux;
 public class MedicalController {
 	private final MedicalAggregatorProxy aggregatorProxy;
 	private final HolidayManager holidayManager;
-	private static final int LIMIT_REQUEST = 20;
 
 	@Operation(summary = "특정 위치에 반경 500m 안에 특정 카테고리(병원, 약국, 동물병원) 의료 서비스 목륵을 제공한다",
 		description = "search medical service by interfaceId",
@@ -46,14 +46,13 @@ public class MedicalController {
 		@ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema =
 		@Schema(implementation = FacilityResponse.class)))})
 	@GetMapping(value = "/latitudes/{latitude}/longitudes/{longitude}/facilities")
-	public Flux<FacilityResponse> getFacilities(
+	public Flux<FacilitiesResponse> getFacilities(
 		@PathVariable MedicalType type, @PathVariable String latitude,
 		@PathVariable String longitude,
 		@RequestParam(required = false) String category,
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
 		return aggregatorProxy.getFacilitiesBy(type, Double.parseDouble(latitude),
-			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay(holidayManager))
-			.limitRequest(LIMIT_REQUEST);
+			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay(holidayManager));
 	}
 
 	@Operation(summary = "특정 사각형 내부에 포함된 (약국, 동물병원) 의료 서비스 목륵을 제공한다 x : 7시 지점, z : 1시 지점",
@@ -65,14 +64,13 @@ public class MedicalController {
 		@Schema(implementation = FacilityResponse.class)))})
 	@GetMapping(value = "/xlatitudes/{xlatitude}/xlongitudes/{xlongitude}/zlatitudes/{zlatitude}/zlongitudes"
 		+ "/{zlongitude}/facilities")
-	public Flux<FacilityResponse> getFacilitiesWithIn(
+	public Flux<FacilitiesResponse> getFacilitiesWithIn(
 		@PathVariable MedicalType type, @PathVariable String xlatitude,
 		@PathVariable String xlongitude, @PathVariable String zlatitude, @PathVariable String zlongitude,
 		@RequestParam(required = false) String category,
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
 		return aggregatorProxy.getFacilitiesWithIn(type, Double.parseDouble(xlatitude),
 			Double.parseDouble(xlongitude), Double.parseDouble(zlatitude),
-			Double.parseDouble(zlongitude), category, operatingHoursFilterWrapper.getDay(holidayManager))
-			.limitRequest(LIMIT_REQUEST);
+			Double.parseDouble(zlongitude), category, operatingHoursFilterWrapper.getDay(holidayManager));
 	}
 }

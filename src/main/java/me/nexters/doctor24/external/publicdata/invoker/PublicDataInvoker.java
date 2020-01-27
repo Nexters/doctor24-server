@@ -44,6 +44,9 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires, Ho
 	@Value("${hospital.key}")
 	private String key;
 
+	@Value("${holiday.key}")
+	private String holidayKey;
+
 	@Override
 	public PageResponse<HospitalBasicRaw> getHospitalPage(PageRequest pageRequest) {
 		String xmlResult = hospitalInvoker.getHospitals(key, pageRequest.getPageSafety(),
@@ -104,7 +107,7 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires, Ho
 
 	@Override
 	public List<HolidayRaw> getHolidayRaws(int year) {
-		String xmlResult = holidayInvoker.getHoliday(key, year).block();
+		String xmlResult = holidayInvoker.getHoliday(holidayKey, year).block();
 		HolidayResponse response = toObjectFromResponse(xmlResult, HolidayResponse.class);
 
 		return response.getHolidayRaws();
