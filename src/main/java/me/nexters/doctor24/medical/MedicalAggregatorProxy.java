@@ -1,6 +1,5 @@
 package me.nexters.doctor24.medical;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,8 +23,6 @@ import reactor.core.publisher.Flux;
  */
 @Service
 public class MedicalAggregatorProxy {
-	private static final LocalTime NIGHT_TIME_SERVE = LocalTime.of(20, 0);
-
 	private final Map<MedicalType, MedicalAggregator> aggregatorMap;
 
 	public MedicalAggregatorProxy(List<MedicalAggregator> medicalAggregators) {
@@ -40,7 +37,7 @@ public class MedicalAggregatorProxy {
 				PolygonFactory.getByXZPoints(new Point(xlongitude, xlatitude), new Point(zlongitude, zlatitude)),
 				requestDay))
 			.map(facilityResponseFlux -> facilityResponseFlux
-				.map(facilityResponse -> setNightTimeServe(facilityResponse, requestDay)))
+				.map(facilityResponse -> facilityResponse.markNightTimeServe(requestDay)))
 			.orElseThrow(
 				() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "지원 하지 않는 medical type 입니다 " + type));
 	}
@@ -50,25 +47,9 @@ public class MedicalAggregatorProxy {
 		return Optional.ofNullable(aggregatorMap.get(type))
 			.map(aggregator -> getFacilitiesByConditions(aggregator, latitude, longitude, category, requestDay))
 			.map(facilityResponseFlux -> facilityResponseFlux
-				.map(facilityResponse -> setNightTimeServe(facilityResponse, requestDay)))
+				.map(facilityResponse -> facilityResponse.markNightTimeServe(requestDay)))
 			.orElseThrow(
 				() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "지원 하지 않는 medical type 입니다 " + type));
-	}
-
-	private FacilityResponse setNightTimeServe(FacilityResponse facilityResponse, Day requestDay) {
-		Optional<Day> targetDay = facilityResponse.getDays().stream()
-			.filter(day -> day.isEqual(requestDay)).findFirst();
-		if (targetDay.isEmpty()) {
-			// target date 이 없을 경우 야간 진료는 없는 것으로 한다.
-			facilityResponse.setNightTimeServe(false);
-			return facilityResponse;
-		}
-		if (targetDay.get().getEndTime().isBefore(NIGHT_TIME_SERVE)) {
-			facilityResponse.setNightTimeServe(false);
-			return facilityResponse;
-		}
-		facilityResponse.setNightTimeServe(true);
-		return facilityResponse;
 	}
 
 	private Flux<FacilityResponse> getFacilitiesByConditions(MedicalAggregator aggregator, double latitude,
