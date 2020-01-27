@@ -278,3 +278,5 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/vim,linux,macos,gradle,windows,eclipse,intellij+all,visualstudiocode
 
 **/node_modules
+
+application-key.yml
