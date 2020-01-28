@@ -70,7 +70,7 @@ public class FacilityResponse {
 			.medicalType(MedicalType.hospital)
 			.phone(hospital.getPhone())
 			.categories(hospital.getCategories())
-			.isEmergency(hospital.isEmergency())
+			//.isEmergency(hospital.isEmergency())
 			.build();
 	}
 
