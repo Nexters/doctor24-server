@@ -25,6 +25,7 @@ public class HospitalParser {
 			.address(AddressParser.parse(hospitalBasicRaw.getAddress()))
 			.hospitalType(HospitalType.find(hospitalBasicRaw.getType()))
 			.days(days)
+			.isEmergency(EmergencyParser.parse(hospitalBasicRaw.getEmergencyCode()))
 			.rowWriteDate(LocalDateTime.now())
 			.build();
 	}

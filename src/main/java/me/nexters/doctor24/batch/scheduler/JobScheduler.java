@@ -21,7 +21,7 @@ public class JobScheduler {
 	private final JobLauncher jobLauncher;
 
 	@Scheduled(cron = "0 0 01 * * ?")
-	public void getHospitalJob() {
+	public void getMedicalJob() {
 		try {
 			JobParameters jobParameters = new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())

@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
-import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
+import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
+import me.nexters.doctor24.medical.pharmacy.repository.PharmacyRepository;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class InvalidHospitalWriter implements ItemWriter<Hospital> {
-	private final HospitalRepository hospitalRepository;
+public class InvalidPharmacyWriter implements ItemWriter<Pharmacy> {
+	private final PharmacyRepository pharmacyRepository;
 
 	@Override
-	public void write(List<? extends Hospital> items) {
-		hospitalRepository.deleteAll(items).block();
+	public void write(List<? extends Pharmacy> items) {
+		pharmacyRepository.deleteAll(items).block();
 	}
 }

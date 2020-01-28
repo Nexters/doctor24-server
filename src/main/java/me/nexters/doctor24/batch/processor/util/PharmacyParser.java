@@ -1,5 +1,6 @@
 package me.nexters.doctor24.batch.processor.util;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +25,7 @@ public class PharmacyParser {
 			.location(new GeoJsonPoint(pharmacyRaw.getLongitude(), pharmacyRaw.getLatitude()))
 			.address(pharmacyRaw.getAddress())
 			.phone(pharmacyRaw.getPhone())
+			.rowWriteDate(LocalDateTime.now())
 			.build();
 	}
 

@@ -1,6 +1,5 @@
 package me.nexters.doctor24.support;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -21,7 +20,7 @@ public final class JacksonUtils {
 
 		try {
 			return Optional.ofNullable(MAPPER.readValue(json, tClass));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error(e.getMessage(), json, e);
 			return Optional.empty();
 		}

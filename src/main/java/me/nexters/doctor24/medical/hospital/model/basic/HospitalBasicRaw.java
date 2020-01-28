@@ -86,4 +86,7 @@ public class HospitalBasicRaw {
 
 	@JsonProperty("dutyTime8c")
 	private String holidayClose;
+
+	@JsonProperty("dutyEryn")
+	private String emergencyCode;
 }
