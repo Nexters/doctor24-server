@@ -44,6 +44,9 @@ public class FacilityResponse {
 	@Schema(description = "야간 진료 유무")
 	private boolean isNightTimeServe;
 
+	@Schema(description = "응급실 유무")
+	private boolean isEmergency;
+
 	@Schema(description = "운영시간")
 	private List<Day> days;
 
@@ -67,6 +70,7 @@ public class FacilityResponse {
 			.medicalType(MedicalType.hospital)
 			.phone(hospital.getPhone())
 			.categories(hospital.getCategories())
+			.isEmergency(hospital.isEmergency())
 			.build();
 	}
 

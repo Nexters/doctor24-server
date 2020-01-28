@@ -12,7 +12,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.data.MongoItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
@@ -24,11 +23,11 @@ import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.batch.config.listener.HospitalDetailFailureStepListener;
 import me.nexters.doctor24.batch.config.listener.HospitalDetailStepListener;
 import me.nexters.doctor24.batch.config.listener.HospitalStepListener;
-import me.nexters.doctor24.batch.config.util.JobParameterUtil;
 import me.nexters.doctor24.batch.processor.HospitalDetailFailureProcessor;
 import me.nexters.doctor24.batch.processor.HospitalDetailProcessor;
 import me.nexters.doctor24.batch.processor.HospitalProcessor;
 import me.nexters.doctor24.batch.processor.InvalidHospitalProcessor;
+import me.nexters.doctor24.batch.processor.InvalidPharmacyProcessor;
 import me.nexters.doctor24.batch.processor.PharmacyProcessor;
 import me.nexters.doctor24.batch.reader.HospitalDetailFailureReader;
 import me.nexters.doctor24.batch.reader.HospitalReader;
@@ -37,6 +36,7 @@ import me.nexters.doctor24.batch.writer.HospitalDetailFailureWriter;
 import me.nexters.doctor24.batch.writer.HospitalDetailWriter;
 import me.nexters.doctor24.batch.writer.HospitalWriter;
 import me.nexters.doctor24.batch.writer.InvalidHospitalWriter;
+import me.nexters.doctor24.batch.writer.InvalidPharmacyWriter;
 import me.nexters.doctor24.batch.writer.PharmacyWriter;
 import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
@@ -45,13 +45,12 @@ import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 
 @Configuration
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class JobConfig {
+public class MedicalJobConfig {
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final HospitalReader hospitalReader;
 	private final HospitalProcessor hospitalProcessor;
 	private final HospitalWriter hospitalWriter;
-	private final MongoTemplate mongoTemplate;
 	private final HospitalDetailProcessor hospitalDetailProcessor;
 	private final HospitalDetailWriter hospitalDetailWriter;
 	private final HospitalDetailFailureReader hospitalDetailFailureReader;
@@ -60,22 +59,29 @@ public class JobConfig {
 	private final HospitalDetailStepListener hospitalDetailStepListener;
 	private final HospitalStepListener hospitalStepListener;
 	private final HospitalDetailFailureStepListener hospitalDetailFailureStepListener;
+	private final InvalidHospitalProcessor invalidHospitalProcessor;
+	private final InvalidHospitalWriter invalidHospitalWriter;
 	private final PharmacyReader pharmacyReader;
 	private final PharmacyProcessor pharmacyProcessor;
 	private final PharmacyWriter pharmacyWriter;
-	private final InvalidHospitalProcessor invalidHospitalProcessor;
-	private final InvalidHospitalWriter invalidHospitalWriter;
+	private final InvalidPharmacyProcessor invalidPharmacyProcessor;
+	private final InvalidPharmacyWriter invalidPharmacyWriter;
+	private final MongoTemplate mongoTemplate;
 
 	@Bean
 	public Job medicalJob(Step hospitalStep, Step hospitalDetailStep, Step hospitalDetailFailureStep,
-		Step pharmacyStep, Step removeInvalidHospitalStep) {
+		Step removeInvalidHospitalStep, Step pharmacyStep, Step removeInvalidPharmacyStep) {
 		return jobBuilderFactory.get("medicalJob")
 			.preventRestart()
 			.start(hospitalStep)
-			.next(hospitalDetailStep)
-			.next(hospitalDetailFailureStep)
-			.next(pharmacyStep)
-			.next(removeInvalidHospitalStep)
+				.next(hospitalDetailStep)
+				.next(hospitalDetailFailureStep)
+					.on("COMPLETED")
+					.to(removeInvalidHospitalStep)
+				.next(pharmacyStep)
+					.on("COMPLETED")
+					.to(removeInvalidPharmacyStep)
+				.end()
 			.build();
 	}
 
@@ -113,20 +119,10 @@ public class JobConfig {
 	}
 
 	@Bean
-	public Step pharmacyStep() {
-		return stepBuilderFactory.get("pharmacyStep")
-			.<List<PharmacyRaw>, List<Pharmacy>>chunk(1)
-			.reader(pharmacyReader)
-			.processor(pharmacyProcessor)
-			.writer(pharmacyWriter)
-			.build();
-	}
-
-	@Bean
 	public Step removeInvalidHospitalStep() {
 		return stepBuilderFactory.get("removeInvalidHospitalStep")
 			.<Hospital, Hospital>chunk(1000)
-			.reader(invalidHospitalDetailReader(null))
+			.reader(invalidHospitalReader())
 			.processor(invalidHospitalProcessor)
 			.writer(invalidHospitalWriter)
 			.build();
@@ -150,7 +146,7 @@ public class JobConfig {
 
 	@Bean
 	@StepScope
-	public MongoItemReader<Hospital> invalidHospitalDetailReader(@Value("#{jobParameters[time]}") Long time) {
+	public MongoItemReader<Hospital> invalidHospitalReader() {
 		MongoItemReader<Hospital> reader = new MongoItemReader<>();
 		reader.setTemplate(mongoTemplate);
 		reader.setCollection("hospital");
@@ -159,8 +155,46 @@ public class JobConfig {
 			put("_id", Sort.Direction.DESC);
 		}});
 		reader.setTargetType(Hospital.class);
-		LocalDateTime jobStartTime = JobParameterUtil.millsToLocalDateTime(time);
-		Criteria criteria = Criteria.where("rowWriteDate").lt(jobStartTime);
+		LocalDateTime threshold = LocalDateTime.now().minusHours(12);
+		Criteria criteria = Criteria.where("rowWriteDate").lt(threshold);
+		Query query = new Query(criteria);
+		reader.setQuery(query);
+		return reader;
+	}
+
+	@Bean
+	public Step pharmacyStep() {
+		return stepBuilderFactory.get("pharmacyStep")
+			.<List<PharmacyRaw>, List<Pharmacy>>chunk(1)
+			.reader(pharmacyReader)
+			.processor(pharmacyProcessor)
+			.writer(pharmacyWriter)
+			.build();
+	}
+
+	@Bean
+	public Step removeInvalidPharmacyStep(MongoItemReader<Pharmacy> invalidPharmacyReader) {
+		return stepBuilderFactory.get("removeInvalidPharmacyStep")
+			.<Pharmacy, Pharmacy>chunk(1000)
+			.reader(invalidPharmacyReader)
+			.processor(invalidPharmacyProcessor)
+			.writer(invalidPharmacyWriter)
+			.build();
+	}
+
+	@Bean
+	@StepScope
+	public MongoItemReader<Pharmacy> invalidPharmacyReader() {
+		MongoItemReader<Pharmacy> reader = new MongoItemReader<>();
+		reader.setTemplate(mongoTemplate);
+		reader.setCollection("pharmacy");
+		reader.setPageSize(1000);
+		reader.setSort(new HashMap<>() {{
+			put("_id", Sort.Direction.DESC);
+		}});
+		reader.setTargetType(Pharmacy.class);
+		LocalDateTime threshold = LocalDateTime.now().minusHours(12);
+		Criteria criteria = Criteria.where("rowWriteDate").lt(threshold);
 		Query query = new Query(criteria);
 		reader.setQuery(query);
 		return reader;
