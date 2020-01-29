@@ -3,7 +3,6 @@ package me.nexters.doctor24.batch.config;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -21,10 +20,8 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.batch.config.listener.HospitalDetailFailureStepListener;
-import me.nexters.doctor24.batch.config.listener.HospitalDetailStepListener;
 import me.nexters.doctor24.batch.config.listener.HospitalStepListener;
 import me.nexters.doctor24.batch.processor.HospitalDetailFailureProcessor;
-import me.nexters.doctor24.batch.processor.HospitalDetailProcessor;
 import me.nexters.doctor24.batch.processor.HospitalProcessor;
 import me.nexters.doctor24.batch.processor.InvalidHospitalProcessor;
 import me.nexters.doctor24.batch.processor.InvalidPharmacyProcessor;
@@ -33,12 +30,12 @@ import me.nexters.doctor24.batch.reader.HospitalDetailFailureReader;
 import me.nexters.doctor24.batch.reader.HospitalReader;
 import me.nexters.doctor24.batch.reader.PharmacyReader;
 import me.nexters.doctor24.batch.writer.HospitalDetailFailureWriter;
-import me.nexters.doctor24.batch.writer.HospitalDetailWriter;
 import me.nexters.doctor24.batch.writer.HospitalWriter;
 import me.nexters.doctor24.batch.writer.InvalidHospitalWriter;
 import me.nexters.doctor24.batch.writer.InvalidPharmacyWriter;
 import me.nexters.doctor24.batch.writer.PharmacyWriter;
-import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
+import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
+import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.pharmacy.model.PharmacyRaw;
 import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
@@ -51,12 +48,9 @@ public class MedicalJobConfig {
 	private final HospitalReader hospitalReader;
 	private final HospitalProcessor hospitalProcessor;
 	private final HospitalWriter hospitalWriter;
-	private final HospitalDetailProcessor hospitalDetailProcessor;
-	private final HospitalDetailWriter hospitalDetailWriter;
 	private final HospitalDetailFailureReader hospitalDetailFailureReader;
 	private final HospitalDetailFailureProcessor hospitalDetailFailureProcessor;
 	private final HospitalDetailFailureWriter hospitalDetailFailureWriter;
-	private final HospitalDetailStepListener hospitalDetailStepListener;
 	private final HospitalStepListener hospitalStepListener;
 	private final HospitalDetailFailureStepListener hospitalDetailFailureStepListener;
 	private final InvalidHospitalProcessor invalidHospitalProcessor;
@@ -69,26 +63,25 @@ public class MedicalJobConfig {
 	private final MongoTemplate mongoTemplate;
 
 	@Bean
-	public Job medicalJob(Step hospitalStep, Step hospitalDetailStep, Step hospitalDetailFailureStep,
+	public Job medicalJob(Step hospitalStep, Step hospitalDetailFailureStep,
 		Step removeInvalidHospitalStep, Step pharmacyStep, Step removeInvalidPharmacyStep) {
 		return jobBuilderFactory.get("medicalJob")
 			.preventRestart()
 			.start(hospitalStep)
-				.next(hospitalDetailStep)
 				.next(hospitalDetailFailureStep)
 					.on("COMPLETED")
 					.to(removeInvalidHospitalStep)
-				.next(pharmacyStep)
-					.on("COMPLETED")
-					.to(removeInvalidPharmacyStep)
-				.end()
+//				.next(pharmacyStep)
+//					.on("COMPLETED")
+//					.to(removeInvalidPharmacyStep)
+			.end()
 			.build();
 	}
 
 	@Bean
 	public Step hospitalStep() {
 		return stepBuilderFactory.get("hospitalStep")
-			.<List<HospitalBasicRaw>, List<Hospital>>chunk(1)
+			.<HospitalRaw, List<Hospital>>chunk(1)
 			.reader(hospitalReader)
 			.processor(hospitalProcessor)
 			.writer(hospitalWriter)
@@ -97,20 +90,9 @@ public class MedicalJobConfig {
 	}
 
 	@Bean
-	public Step hospitalDetailStep() {
-		return stepBuilderFactory.get("hospitalDetailStep")
-			.<Hospital, Hospital>chunk(1000)
-			.reader(hospitalDetailReader())
-			.processor(hospitalDetailProcessor)
-			.writer(hospitalDetailWriter)
-			.listener(hospitalDetailStepListener)
-			.build();
-	}
-
-	@Bean
 	public Step hospitalDetailFailureStep() {
 		return stepBuilderFactory.get("hospitalDetailFailureStep")
-			.<Map<String, Hospital>, List<Hospital>>chunk(1)
+			.<List<HospitalDetailRaw>, List<Hospital>>chunk(1)
 			.reader(hospitalDetailFailureReader)
 			.processor(hospitalDetailFailureProcessor)
 			.writer(hospitalDetailFailureWriter)
@@ -126,22 +108,6 @@ public class MedicalJobConfig {
 			.processor(invalidHospitalProcessor)
 			.writer(invalidHospitalWriter)
 			.build();
-	}
-
-	@Bean
-	@StepScope
-	public MongoItemReader<Hospital> hospitalDetailReader() {
-		MongoItemReader<Hospital> reader = new MongoItemReader<>();
-		reader.setTemplate(mongoTemplate);
-		reader.setCollection("hospital");
-		reader.setPageSize(1000);
-		reader.setSort(new HashMap<>() {{
-			put("_id", Sort.Direction.DESC);
-		}});
-		reader.setTargetType(Hospital.class);
-		Query emptyQuery = new Query();
-		reader.setQuery(emptyQuery);
-		return reader;
 	}
 
 	@Bean

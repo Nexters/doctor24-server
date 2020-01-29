@@ -1,33 +1,32 @@
 package me.nexters.doctor24.batch;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InvokeFailureContext {
-	private static final Map<String, Hospital> FAILED_HOSPITALS = new ConcurrentHashMap<>();
+	private static final List<String> FAILED_HOSPITAL_IDS = new CopyOnWriteArrayList<>();
 
 	private InvokeFailureContext() {
 	}
 
-	public static void add(String id, Hospital hospital) {
-		FAILED_HOSPITALS.put(id, hospital);
+	public static void add(String id) {
+		FAILED_HOSPITAL_IDS.add(id);
 	}
 
 	public static boolean isEmpty() {
-		return FAILED_HOSPITALS.isEmpty();
+		return FAILED_HOSPITAL_IDS.isEmpty();
 	}
 
-	public static Map<String, Hospital> getFailedHospitals() {
-		return Map.copyOf(FAILED_HOSPITALS);
+	public static List<String> getFailedHospitalIds() {
+		return new ArrayList<>(FAILED_HOSPITAL_IDS);
 	}
 
 	public static int size() {
-		return FAILED_HOSPITALS.size();
+		return FAILED_HOSPITAL_IDS.size();
 	}
 
 	public static void clear() {
-		FAILED_HOSPITALS.clear();
+		FAILED_HOSPITAL_IDS.clear();
 	}
 }
