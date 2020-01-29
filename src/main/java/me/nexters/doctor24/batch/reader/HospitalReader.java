@@ -43,12 +43,14 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 			hospitalBasicRaws.addAll(hospitalBasicPage.getContents());
 		}
 
+		log.info("Basic Read Finished");
 		List<HospitalDetailRaw> hospitalDetailRaws = new ArrayList<>();
 		hospitalBasicRaws.forEach(basicRaw -> {
 			HospitalDetailRaw hospitalDetailRaw = getHospitalDetailRaw(basicRaw);
 			hospitalDetailRaws.add(hospitalDetailRaw);
 		});
 
+		log.info("Detail Read Finished");
 		return new HospitalRaw(hospitalBasicRaws, hospitalDetailRaws);
 	}
 

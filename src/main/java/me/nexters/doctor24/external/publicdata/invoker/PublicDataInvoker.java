@@ -1,5 +1,6 @@
 package me.nexters.doctor24.external.publicdata.invoker;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,11 +50,16 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires, Ho
 
 	@Override
 	public PageResponse<HospitalBasicRaw> getHospitalPage(PageRequest pageRequest) {
-		String xmlResult = hospitalInvoker.getHospitals(key, pageRequest.getPageSafety(),
-			pageRequest.getCount()).block();
-		HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
+		try {
+			String xmlResult = hospitalInvoker.getHospitals(key, pageRequest.getPageSafety(),
+				pageRequest.getCount()).block();
+			HospitalResponse response = toObjectFromResponse(xmlResult, HospitalResponse.class);
 
-		return PageResponse.of(response.getHospitals(), pageRequest);
+			return PageResponse.of(response.getHospitals(), pageRequest);
+		} catch (Exception e) {
+			return PageResponse.of(Collections.emptyList(), PageRequest.of(pageRequest.getPageSafety() - 1,
+				pageRequest.getCount()));
+		}
 	}
 
 	@Override
