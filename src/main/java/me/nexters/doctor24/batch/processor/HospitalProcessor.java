@@ -9,17 +9,24 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.batch.processor.util.HospitalParser;
+import me.nexters.doctor24.medical.hospital.model.HospitalRaw;
 import me.nexters.doctor24.medical.hospital.model.basic.HospitalBasicRaw;
+import me.nexters.doctor24.medical.hospital.model.detail.HospitalDetailRaw;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class HospitalProcessor implements ItemProcessor<List<HospitalBasicRaw>, List<Hospital>> {
+public class HospitalProcessor implements ItemProcessor<HospitalRaw, List<Hospital>> {
 
 	@Override
-	public List<Hospital> process(List<HospitalBasicRaw> hospitalBasicRaws) {
+	public List<Hospital> process(HospitalRaw hospitalRaw) {
+		List<HospitalBasicRaw> hospitalBasicRaws = hospitalRaw.getHospitalBasicRaws();
+		List<HospitalDetailRaw> hospitalDetailRaws = hospitalRaw.getHospitalDetailRaws();
+
 		return hospitalBasicRaws.stream()
-			.map(HospitalParser::parse)
+			.flatMap(hospitalBasicRaw -> hospitalDetailRaws.stream()
+				.filter(hospitalDetailRaw -> hospitalDetailRaw.getId().equals(hospitalBasicRaw.getId()))
+				.map(hospitalDetailRaw -> HospitalParser.parse(hospitalBasicRaw, hospitalDetailRaw)))
 			.collect(Collectors.toList());
 	}
 }
