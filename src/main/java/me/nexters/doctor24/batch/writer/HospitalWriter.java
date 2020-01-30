@@ -20,7 +20,7 @@ public class HospitalWriter implements ItemWriter<List<Hospital>> {
 
 	@Override
 	public void write(List<? extends List<Hospital>> items) {
-		log.info("Write start");
+		log.info("hospital batch write start");
 		items.forEach(
 			hospitals -> hospitals
 				.forEach(hospital -> {
