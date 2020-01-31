@@ -94,11 +94,16 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires, Ho
 
 	@Override
 	public PageResponse<PharmacyRaw> getPharmacyPage(PageRequest pageRequest) {
-		String xmlResult = pharmacyInvoker.getPharmacies(key, pageRequest.getPageSafety(),
-			pageRequest.getCount()).block();
-		PharmacyResponse response = toObjectFromResponse(xmlResult, PharmacyResponse.class);
+		try {
+			String xmlResult = pharmacyInvoker.getPharmacies(key, pageRequest.getPageSafety(),
+				pageRequest.getCount()).block();
+			PharmacyResponse response = toObjectFromResponse(xmlResult, PharmacyResponse.class);
 
-		return PageResponse.of(response.getPharmacies(), pageRequest);
+			return PageResponse.of(response.getPharmacies(), pageRequest);
+		} catch (Exception e) {
+			return PageResponse.of(Collections.emptyList(), PageRequest.of(pageRequest.getPageSafety() - 1,
+				pageRequest.getCount()));
+		}
 	}
 
 	@Override
