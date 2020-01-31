@@ -71,9 +71,9 @@ public class MedicalJobConfig {
 				.next(removeInvalidHospitalStep)
 					.on("COMPLETED")
 					.to(hospitalDetailFailureStep)
-//				.next(pharmacyStep)
-//					.on("COMPLETED")
-//					.to(removeInvalidPharmacyStep)
+				.next(pharmacyStep)
+					.on("COMPLETED")
+					.to(removeInvalidPharmacyStep)
 			.end()
 			.build();
 	}
