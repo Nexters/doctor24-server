@@ -101,8 +101,8 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires, Ho
 
 			return PageResponse.of(response.getPharmacies(), pageRequest);
 		} catch (Exception e) {
-			return PageResponse.of(Collections.emptyList(), PageRequest.of(pageRequest.getPageSafety() - 1,
-				pageRequest.getCount()));
+			// TODO exception 처리 (호출하는데서 처리하긴 함)
+			return null;
 		}
 	}
 

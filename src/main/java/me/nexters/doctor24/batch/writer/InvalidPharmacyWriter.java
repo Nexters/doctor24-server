@@ -19,6 +19,7 @@ public class InvalidPharmacyWriter implements ItemWriter<Pharmacy> {
 
 	@Override
 	public void write(List<? extends Pharmacy> items) {
+		log.info("Pharmacy " + items.size() + "개 삭제");
 		pharmacyRepository.deleteAll(items).block();
 	}
 }
