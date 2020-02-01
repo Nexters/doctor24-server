@@ -16,7 +16,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RadiusLevel {
 	LEVEL1(1, 0.5, 60),
-	LEVEL2(2, 1,60),
+	LEVEL2(2, 1, 60),
 	LEVEL3(3, 1.5, 100),
 	LEVEL4(4, 2, 100);
 
