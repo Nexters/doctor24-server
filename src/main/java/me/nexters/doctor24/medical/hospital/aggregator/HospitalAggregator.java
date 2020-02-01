@@ -21,7 +21,6 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HospitalAggregator implements MedicalAggregator {
 
-	private static final double DEFAULT_DISTANCE = 0.5;
 	private static final int PAGE_COUNT_WITH_FILTERING = 60;
 	private static final String LOCATION_FILED = "location";
 
@@ -33,20 +32,21 @@ public class HospitalAggregator implements MedicalAggregator {
 	}
 
 	@Override
-	public Flux<FacilityResponse> getFacilitiesFilteringByDay(double latitude, double longitude, Day requestDay) {
+	public Flux<FacilityResponse> getFacilitiesFilteringByDay(double latitude, double longitude,
+		double radiusRange, int inquiryCount, Day requestDay) {
 		return hospitalRepository.findByLocationNear(new Point(longitude, latitude),
-			new Distance(DEFAULT_DISTANCE, Metrics.KILOMETERS),
-			PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			new Distance(radiusRange, Metrics.KILOMETERS),
+			PageRequest.of(0, inquiryCount, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
 			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(FacilityResponse::fromHospital);
 	}
 
 	@Override
 	public Flux<FacilityResponse> getFacilitiesFilteringByCategoryAndDay(double latitude, double longitude,
-		String category, Day requestDay) {
+		double radiusRange, int inquiryCount, String category, Day requestDay) {
 		return hospitalRepository.findByLocationNearAndCategories(new Point(longitude, latitude),
-			new Distance(DEFAULT_DISTANCE, Metrics.KILOMETERS), category,
-			PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			new Distance(radiusRange, Metrics.KILOMETERS), category,
+			PageRequest.of(0, inquiryCount, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
 			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(FacilityResponse::fromHospital);
 	}

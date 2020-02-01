@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.medical.MedicalAggregatorProxy;
 import me.nexters.doctor24.medical.api.request.filter.OperatingHoursFilterWrapper;
+import me.nexters.doctor24.medical.api.request.param.RadiusLevel;
 import me.nexters.doctor24.medical.api.response.FacilitiesResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.api.type.SwaggerApiTag;
@@ -46,9 +47,12 @@ public class MedicalController {
 		@PathVariable MedicalType type, @PathVariable String latitude,
 		@PathVariable String longitude,
 		@RequestParam(required = false) String category,
-		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper) {
+		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper,
+		@Parameter(description = "1(0.5km), 2(1km), 3(1.5km) ,4(2km) 단계의 반경범위")
+		@RequestParam(defaultValue = "1") int radiusLevel) {
 		return aggregatorProxy.getFacilitiesBy(type, Double.parseDouble(latitude),
-			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay(holidayManager));
+			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay(holidayManager),
+			RadiusLevel.getBy(radiusLevel));
 	}
 
 	@Operation(summary = "특정 사각형 내부에 포함된 (약국, 동물병원) 의료 서비스 목륵을 제공한다 x : 7시 지점, z : 1시 지점",
