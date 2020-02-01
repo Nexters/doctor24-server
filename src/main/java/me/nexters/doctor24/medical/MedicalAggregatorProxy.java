@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 
+import me.nexters.doctor24.medical.api.request.param.RadiusLevel;
 import me.nexters.doctor24.medical.api.response.FacilitiesResponse;
 import me.nexters.doctor24.medical.api.response.FacilityResponse;
 import me.nexters.doctor24.medical.api.type.MedicalType;
@@ -47,9 +48,10 @@ public class MedicalAggregatorProxy {
 	}
 
 	public Flux<FacilitiesResponse> getFacilitiesBy(MedicalType type, double latitude, double longitude,
-		String category, Day requestDay) {
+		String category, Day requestDay, RadiusLevel radiusLevel) {
 		return convertFrom(Optional.ofNullable(aggregatorMap.get(type))
-			.map(aggregator -> getFacilitiesByConditions(aggregator, latitude, longitude, category, requestDay))
+			.map(aggregator -> getFacilitiesByConditions(aggregator, latitude, longitude, radiusLevel, category,
+				requestDay))
 			.map(facilityResponseFlux -> facilityResponseFlux
 				.map(facilityResponse -> facilityResponse.markNightTimeServe(requestDay)))
 			.orElseThrow(
@@ -66,10 +68,12 @@ public class MedicalAggregatorProxy {
 	}
 
 	private Flux<FacilityResponse> getFacilitiesByConditions(MedicalAggregator aggregator, double latitude,
-		double longitude, String category, Day requestDay) {
+		double longitude, RadiusLevel radiusLevel, String category, Day requestDay) {
 		return !StringUtils.isEmpty(category) ?
-			aggregator.getFacilitiesFilteringByCategoryAndDay(latitude, longitude, category, requestDay)
-			: aggregator.getFacilitiesFilteringByDay(latitude, longitude, requestDay);
+			aggregator.getFacilitiesFilteringByCategoryAndDay(latitude, longitude, radiusLevel.getRangeKM(),
+				radiusLevel.getInquiryCount(), category, requestDay)
+			: aggregator.getFacilitiesFilteringByDay(latitude, longitude,
+			radiusLevel.getRangeKM(), radiusLevel.getInquiryCount(), requestDay);
 	}
 
 	private String generateKey(FacilityResponse facilityResponse) {

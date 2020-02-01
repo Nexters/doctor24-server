@@ -36,17 +36,18 @@ public class PharmacyAggregator implements MedicalAggregator {
 	}
 
 	@Override
-	public Flux<FacilityResponse> getFacilitiesFilteringByDay(double latitude, double longitude, Day requestDay) {
+	public Flux<FacilityResponse> getFacilitiesFilteringByDay(double latitude, double longitude,
+		double radiusRange, int inquiryCount, Day requestDay) {
 		return pharmacyRepository.findByLocationNear(new Point(longitude, latitude),
-			new Distance(DEFAULT_DISTANCE, Metrics.KILOMETERS),
-			PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			new Distance(radiusRange, Metrics.KILOMETERS),
+			PageRequest.of(0, inquiryCount, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
 			.filter(pharmacy -> pharmacy.isOpen(requestDay))
 			.map(FacilityResponse::fromPharmacy);
 	}
 
 	@Override
 	public Flux<FacilityResponse> getFacilitiesFilteringByCategoryAndDay(double latitude, double longitude,
-		String category, Day requestDay) {
+		double radiusRange, int inquiryCount, String category, Day requestDay) {
 		throw new UnsupportedOperationException("not support category filtering about pharmacy type");
 	}
 
