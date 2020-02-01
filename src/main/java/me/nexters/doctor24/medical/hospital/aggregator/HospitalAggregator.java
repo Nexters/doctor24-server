@@ -55,7 +55,7 @@ public class HospitalAggregator implements MedicalAggregator {
 	public Flux<FacilityResponse> getFacilitiesWithIn(Polygon polygon, Day requestDay) {
 		return hospitalRepository
 			.findByLocationWithin(
-				polygon, PageRequest.of(0, PAGE_COUNT_WITH_FILTERING, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+				polygon, PageRequest.of(0, PAGE_COUNT_WITH_FILTERING))
 			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(FacilityResponse::fromHospital);
 	}
