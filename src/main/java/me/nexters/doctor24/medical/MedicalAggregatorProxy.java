@@ -1,6 +1,7 @@
 package me.nexters.doctor24.medical;
 
-import java.util.Arrays;
+import static java.util.stream.Collectors.*;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,8 +61,9 @@ public class MedicalAggregatorProxy {
 	}
 
 	private Flux<FacilitiesResponse> convertFrom(Flux<FacilityResponse> facilityResponseFlux) {
-		return facilityResponseFlux
-			.collectMap(this::generateKey, Arrays::asList)
+		return facilityResponseFlux.collectList()
+			.map(facilityResponses -> facilityResponses.stream()
+					.collect(groupingBy(this::generateKey)))
 			.map(Map::values)
 			.flatMapMany(Flux::fromIterable)
 			.map(FacilitiesResponse::of);
