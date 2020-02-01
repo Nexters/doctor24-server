@@ -20,7 +20,6 @@ public class PageResponse<T> {
 	private int requestCount;
 	private int page;
 
-
 	public static <T> PageResponse<T> of(List<T> contents, PageRequest pageRequest) {
 		return new PageResponse<>(contents, pageRequest.getCount(), pageRequest.getPage());
 	}

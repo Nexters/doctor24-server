@@ -13,4 +13,11 @@ public class CategoryParser {
 		}
 		return List.of(input.split(","));
 	}
+
+	public static String toRaw(List<String> categories) {
+		if (categories == null) {
+			return "";
+		}
+		return categories.toString().replaceAll("\\[", "").replaceAll("\\]", "");
+	}
 }

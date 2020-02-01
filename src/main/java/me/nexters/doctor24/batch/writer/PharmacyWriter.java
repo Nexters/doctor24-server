@@ -18,6 +18,7 @@ public class PharmacyWriter implements ItemWriter<List<Pharmacy>> {
 
 	@Override
 	public void write(List<? extends List<Pharmacy>> items) {
+		System.out.println("write start !! size : " + items.size());
 		items.forEach(
 			pharmacies -> pharmacies.forEach(pharmacy -> {
 				if (Objects.nonNull(pharmacy)) {
@@ -25,5 +26,6 @@ public class PharmacyWriter implements ItemWriter<List<Pharmacy>> {
 				}
 			})
 		);
+		System.out.println("write 끗");
 	}
 }

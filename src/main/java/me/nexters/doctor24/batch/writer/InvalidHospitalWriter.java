@@ -19,7 +19,7 @@ public class InvalidHospitalWriter implements ItemWriter<Hospital> {
 
 	@Override
 	public void write(List<? extends Hospital> items) {
-		log.info(items.size() + "개 삭제");
+		log.info("Hospital " + items.size() + "개 삭제");
 		hospitalRepository.deleteAll(items).block();
 	}
 }

@@ -18,7 +18,7 @@ import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 @UtilityClass
 public class HospitalParser {
 	public static Hospital parse(HospitalBasicRaw hospitalBasicRaw, HospitalDetailRaw hospitalDetailRaw) {
-		List<Day> days = extractDays(hospitalDetailRaw);
+		List<Day> days = extractDays(hospitalBasicRaw);
 		boolean isEmergency = extractEmergency(hospitalBasicRaw);
 
 		return Hospital.builder()
@@ -54,12 +54,73 @@ public class HospitalParser {
 	}
 
 	// 추상화로 묶을까..
+
 	private static boolean extractEmergency(HospitalBasicRaw hospitalBasicRaw) {
 		return Optional.of(EmergencyParser.parse(hospitalBasicRaw.getEmergencyCode())).orElse(false);
 	}
-
 	private static boolean extractEmergency(HospitalDetailRaw hospitalDetailRaw) {
 		return Optional.of(EmergencyParser.parse(hospitalDetailRaw.getEmergencyCode())).orElse(false);
+	}
+
+	private static List<Day> extractDays(HospitalBasicRaw hospitalBasicRaw) {
+		List<Day> days = new ArrayList<>();
+		if (Objects.nonNull(hospitalBasicRaw.getMondayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getMondayClose())) {
+			days.add(Day.of(Day.DayType.MONDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getMondayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getMondayClose())));
+		}
+
+		if (Objects.nonNull(hospitalBasicRaw.getTuesdayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getTuesdayClose())) {
+			days.add(Day.of(Day.DayType.TUESDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getTuesdayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getTuesdayClose())));
+		}
+
+		if (Objects.nonNull(hospitalBasicRaw.getWednesdayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getWednesdayClose())) {
+			days.add(Day.of(Day.DayType.WEDNESDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getWednesdayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getWednesdayClose())));
+		}
+
+		if (Objects.nonNull(hospitalBasicRaw.getThursdayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getThursdayClose())) {
+			days.add(Day.of(Day.DayType.THURSDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getThursdayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getThursdayClose())));
+		}
+
+		if (Objects.nonNull(hospitalBasicRaw.getFridayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getFridayClose())) {
+			days.add(Day.of(Day.DayType.FRIDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getFridayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getFridayClose())));
+		}
+
+		if (Objects.nonNull(hospitalBasicRaw.getSaturdayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getSaturdayClose())) {
+			days.add(Day.of(Day.DayType.SATURDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getSaturdayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getSaturdayClose())));
+		}
+
+		if (Objects.nonNull(hospitalBasicRaw.getSundayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getSundayClose())) {
+			days.add(Day.of(Day.DayType.SUNDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getSundayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getSundayClose())));
+		}
+
+		if (Objects.nonNull(hospitalBasicRaw.getHolidayStart()) && Objects.nonNull(
+			hospitalBasicRaw.getHolidayClose())) {
+			days.add(Day.of(Day.DayType.HOLIDAY,
+				OpeningHourParser.parse(hospitalBasicRaw.getHolidayStart()),
+				OpeningHourParser.parse(hospitalBasicRaw.getHolidayClose())));
+		}
+
+		return days;
 	}
 
 	private static List<Day> extractDays(HospitalDetailRaw hospitalDetailRaw) {

@@ -29,11 +29,15 @@ public class PharmacyReader implements ItemReader<List<PharmacyRaw>> {
 		if (isAlreadyInvoked()) {
 			return null;
 		}
-
-		PageResponse<PharmacyRaw> pharmacyPage = invoker.getPharmacyPage(PageRequest.of(1, 100));
+		PageResponse<PharmacyRaw> pharmacyPage = invoker.getPharmacyPage(PageRequest.of(1, 150));
 		List<PharmacyRaw> pharmacyRaws = new ArrayList<>(pharmacyPage.getContents());
 		while (pharmacyPage.hasNext()) {
-			invoker.getPharmacyPage(PageRequest.of(1, 100));
+			PageResponse<PharmacyRaw> result = invoker.getPharmacyPage(
+				PageRequest.of(pharmacyPage.getNextPage(), 150));
+			if (result == null) {
+				continue;
+			}
+			pharmacyPage = result;
 			pharmacyRaws.addAll(pharmacyPage.getContents());
 		}
 		return pharmacyRaws;
