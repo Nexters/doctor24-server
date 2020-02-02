@@ -1,5 +1,6 @@
 package me.nexters.doctor24.batch.writer;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +21,9 @@ public class HospitalWriter implements ItemWriter<List<Hospital>> {
 
 	@Override
 	public void write(List<? extends List<Hospital>> items) {
-		log.info("hospital batch write start");
+		Long size = items.stream()
+			.mapToLong(Collection::size).sum();
+		log.info("hospital 배치 Write 시작 {} 개", size);
 		items.forEach(
 			hospitals -> hospitals
 				.forEach(hospital -> {
