@@ -42,12 +42,15 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 		PageResponse<HospitalBasicRaw> hospitalBasicPage = invoker.getHospitalPage(PageRequest.of(1, 150));
 		List<HospitalBasicRaw> hospitalBasicRaws = new ArrayList<>(hospitalBasicPage.getContents());
 		while (hospitalBasicPage.hasNext()) {
-			hospitalBasicPage =
-				invoker.getHospitalPage(PageRequest.of(hospitalBasicPage.getNextPage(), 150));
-			hospitalBasicRaws.addAll(hospitalBasicPage.getContents());
+			PageResponse<HospitalBasicRaw> result = invoker.getHospitalPage(
+				PageRequest.of(hospitalBasicPage.getNextPage(), 150));
+			if (result == null) {
+				continue;
+			}
+			hospitalBasicPage = result;
 		}
 
-		log.info("Basic Read Finished");
+		log.info("Basic Read Finished! page number : {}", hospitalBasicPage.getPage());
 		List<HospitalDetailRaw> hospitalDetailRaws = new ArrayList<>();
 		hospitalBasicRaws.forEach(basicRaw -> {
 			Hospital hospital = hospitalRepository.findById(basicRaw.getId()).block();

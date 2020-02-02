@@ -1,6 +1,5 @@
 package me.nexters.doctor24.external.publicdata.invoker;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,8 +56,8 @@ public class PublicDataInvoker implements HospitalInquires, PharmacyInquires, Ho
 
 			return PageResponse.of(response.getHospitals(), pageRequest);
 		} catch (Exception e) {
-			return PageResponse.of(Collections.emptyList(), PageRequest.of(pageRequest.getPageSafety() - 1,
-				pageRequest.getCount()));
+			log.warn("hospital page 요청 exception 발생 msg : {} ", e.getMessage());
+			return null;
 		}
 	}
 
