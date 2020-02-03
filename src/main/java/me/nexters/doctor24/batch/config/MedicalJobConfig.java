@@ -68,13 +68,8 @@ public class MedicalJobConfig {
 		return jobBuilderFactory.get("medicalJob")
 			.preventRestart()
 			.start(hospitalStep)
-				.next(removeInvalidHospitalStep)
-					.on("COMPLETED")
-					.to(hospitalDetailFailureStep)
-				.next(pharmacyStep)
-					.on("COMPLETED")
-					.to(removeInvalidPharmacyStep)
-			.end()
+			.next(hospitalDetailFailureStep)
+			.next(pharmacyStep)
 			.build();
 	}
 
