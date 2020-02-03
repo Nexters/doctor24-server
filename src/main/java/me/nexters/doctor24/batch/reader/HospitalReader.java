@@ -48,29 +48,32 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 				continue;
 			}
 			hospitalBasicPage = result;
+			hospitalBasicRaws.addAll(hospitalBasicPage.getContents());
 		}
 
 		log.info("Basic Read Finished! page number : {}", hospitalBasicPage.getPage());
 		List<HospitalDetailRaw> hospitalDetailRaws = new ArrayList<>();
-		hospitalBasicRaws.forEach(basicRaw -> {
-			Hospital hospital = hospitalRepository.findById(basicRaw.getId()).block();
-			if (hospital == null) {
-				createNewHospital(hospitalDetailRaws, basicRaw);
-			} else {
-				createExistingHospital(hospitalDetailRaws, basicRaw, hospital);
-			}
-		});
+		hospitalBasicRaws.forEach(basicRaw -> parse(hospitalDetailRaws, basicRaw));
 		log.info("Detail Read Finished");
 		return new HospitalRaw(hospitalBasicRaws, hospitalDetailRaws);
 	}
 
-	private void createNewHospital(List<HospitalDetailRaw> hospitalDetailRaws, HospitalBasicRaw basicRaw) {
+	private void parse(List<HospitalDetailRaw> hospitalDetailRaws, HospitalBasicRaw basicRaw) {
+		Hospital hospital = hospitalRepository.findById(basicRaw.getId()).block();
+		if (hospital == null) {
+			addNewHospital(hospitalDetailRaws, basicRaw);
+			return;
+		}
+		addExistingHospital(hospitalDetailRaws, basicRaw, hospital);
+	}
+
+	private void addNewHospital(List<HospitalDetailRaw> hospitalDetailRaws, HospitalBasicRaw basicRaw) {
 		log.info("새로운 병원 추가! 아이디 : {}, 이름 : {}", basicRaw.getId(), basicRaw.getName());
 		HospitalDetailRaw hospitalDetailRaw = getHospitalDetailRaw(basicRaw.getId());
 		hospitalDetailRaws.add(hospitalDetailRaw);
 	}
 
-	private void createExistingHospital(List<HospitalDetailRaw> hospitalDetailRaws, HospitalBasicRaw basicRaw,
+	private void addExistingHospital(List<HospitalDetailRaw> hospitalDetailRaws, HospitalBasicRaw basicRaw,
 		Hospital hospital) {
 		HospitalDetailRaw hospitalDetailRaw = new HospitalDetailRaw();
 		hospitalDetailRaw.setId(basicRaw.getId());

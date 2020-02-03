@@ -23,7 +23,8 @@ public class HospitalWriter implements ItemWriter<List<Hospital>> {
 	public void write(List<? extends List<Hospital>> items) {
 		Long size = items.stream()
 			.mapToLong(Collection::size).sum();
-		log.info("hospital 배치 Write 시작 {} 개", size);		items.forEach(
+		log.info("hospital 배치 Write 시작 {} 개", size);
+		items.forEach(
 			hospitals -> hospitals
 				.forEach(hospital -> {
 					if (Objects.nonNull(hospital)) {
