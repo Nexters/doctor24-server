@@ -42,7 +42,7 @@ public class OperatingHoursFilterWrapper {
 	private Day currentTimeDay() {
 		LocalDateTime now = LocalDateTime.now();
 		return Day.of(Day.DayType.valueOf(now.getDayOfWeek().name()),
-			now.toLocalTime(), now.toLocalTime());
+			now.toLocalTime(), now.toLocalTime().plusHours(1));
 	}
 }
 
