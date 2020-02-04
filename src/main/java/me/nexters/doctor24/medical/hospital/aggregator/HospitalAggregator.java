@@ -2,7 +2,6 @@ package me.nexters.doctor24.medical.hospital.aggregator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
@@ -22,8 +21,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HospitalAggregator implements MedicalAggregator {
 
-	private static final String LOCATION_FILED = "location";
-
 	private final HospitalRepository hospitalRepository;
 
 	@Override
@@ -42,7 +39,7 @@ public class HospitalAggregator implements MedicalAggregator {
 		double radiusRange, int inquiryCount, Day requestDay) {
 		return hospitalRepository.findByLocationNear(new Point(longitude, latitude),
 			new Distance(radiusRange, Metrics.KILOMETERS),
-			PageRequest.of(0, inquiryCount, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			PageRequest.of(0, inquiryCount))
 			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(hospital -> FacilityIndexResponse.fromHospital(hospital, requestDay));
 	}
@@ -52,7 +49,7 @@ public class HospitalAggregator implements MedicalAggregator {
 		double radiusRange, int inquiryCount, String category, Day requestDay) {
 		return hospitalRepository.findByLocationNearAndCategories(new Point(longitude, latitude),
 			new Distance(radiusRange, Metrics.KILOMETERS), category,
-			PageRequest.of(0, inquiryCount, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			PageRequest.of(0, inquiryCount))
 			.filter(hospital -> hospital.isOpen(requestDay))
 			.map(hospital -> FacilityIndexResponse.fromHospital(hospital, requestDay));
 	}

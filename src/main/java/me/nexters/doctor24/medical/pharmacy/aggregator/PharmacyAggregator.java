@@ -2,7 +2,6 @@ package me.nexters.doctor24.medical.pharmacy.aggregator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
@@ -24,9 +23,6 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PharmacyAggregator implements MedicalAggregator {
-
-	private static final String LOCATION_FILED = "location";
-
 	private final PharmacyRepository pharmacyRepository;
 
 	@Override
@@ -45,7 +41,7 @@ public class PharmacyAggregator implements MedicalAggregator {
 		double radiusRange, int inquiryCount, Day requestDay) {
 		return pharmacyRepository.findByLocationNear(new Point(longitude, latitude),
 			new Distance(radiusRange, Metrics.KILOMETERS),
-			PageRequest.of(0, inquiryCount, Sort.by(Sort.Direction.ASC, LOCATION_FILED)))
+			PageRequest.of(0, inquiryCount))
 			.filter(pharmacy -> pharmacy.isOpen(requestDay))
 			.map(pharmacy -> FacilityIndexResponse.fromPharmacy(pharmacy, requestDay));
 	}
