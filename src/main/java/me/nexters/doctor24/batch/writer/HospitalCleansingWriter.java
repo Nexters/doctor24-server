@@ -14,7 +14,7 @@ import me.nexters.doctor24.medical.hospital.repository.HospitalRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class InvalidHospitalWriter implements ItemWriter<Hospital> {
+public class HospitalCleansingWriter implements ItemWriter<Hospital> {
 	private final HospitalRepository hospitalRepository;
 
 	@Override

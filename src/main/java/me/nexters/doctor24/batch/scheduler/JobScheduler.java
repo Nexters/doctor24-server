@@ -24,7 +24,7 @@ public class JobScheduler {
 	public void getMedicalJob() {
 		try {
 			JobParameters jobParameters = new JobParametersBuilder()
-				.addLong("time", System.currentTimeMillis())
+				.addLong("startTime", System.currentTimeMillis())
 				.toJobParameters();
 			JobExecution jobExecution = jobLauncher.run(medicalJob, jobParameters);
 			log.info("job 종료 시간 : {}", jobExecution.getEndTime());

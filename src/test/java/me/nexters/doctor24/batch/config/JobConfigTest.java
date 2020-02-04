@@ -22,7 +22,7 @@ class JobConfigTest {
 	private HospitalRepository hospitalRepository;
 
 	private JobParameters jobParameters = new JobParametersBuilder()
-		.addLong("time", System.currentTimeMillis())
+		.addLong("startTime", System.currentTimeMillis())
 		.toJobParameters();
 
 	@Ignore

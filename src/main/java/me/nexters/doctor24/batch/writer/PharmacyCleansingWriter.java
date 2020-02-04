@@ -14,7 +14,7 @@ import me.nexters.doctor24.medical.pharmacy.repository.PharmacyRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class InvalidPharmacyWriter implements ItemWriter<Pharmacy> {
+public class PharmacyCleansingWriter implements ItemWriter<Pharmacy> {
 	private final PharmacyRepository pharmacyRepository;
 
 	@Override
