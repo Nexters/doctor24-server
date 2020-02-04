@@ -25,16 +25,16 @@ public class FacilitiesResponse {
 	private double longitude;
 
 	@Schema(description = "의료 기관 리스트")
-	private List<FacilityResponse> facilities;
+	private List<FacilityIndexResponse> facilities;
 
 	@Schema(description = "기관 리스트 카운트 정보")
 	private int total;
 
-	public static FacilitiesResponse of(List<FacilityResponse> facilityResponses) {
+	public static FacilitiesResponse of(List<FacilityIndexResponse> facilityResponses) {
 		if (CollectionUtils.isEmpty(facilityResponses)) {
 			return new FacilitiesResponse();
 		}
-		FacilityResponse first = facilityResponses.get(0);
+		FacilityIndexResponse first = facilityResponses.get(0);
 		return new FacilitiesResponse(first.getLatitude(),
 			first.getLongitude(), facilityResponses, facilityResponses.size());
 	}
