@@ -56,6 +56,9 @@ public class FacilityIndexResponse {
 	@Schema(description = "주소")
 	private String address;
 
+	@Schema(description = "진료과목 (hospital type만 존재)")
+	private List<String> categories;
+
 	public static FacilityIndexResponse fromHospital(Hospital hospital, Day requestDay) {
 		return FacilityIndexResponse.builder()
 			.id(hospital.getId())
@@ -67,6 +70,7 @@ public class FacilityIndexResponse {
 			.medicalType(MedicalType.hospital)
 			.phone(hospital.getPhone())
 			.isEmergency(hospital.isEmergency())
+			.categories(hospital.getCategories())
 			.build();
 	}
 
