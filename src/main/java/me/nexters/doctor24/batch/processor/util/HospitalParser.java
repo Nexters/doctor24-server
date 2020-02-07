@@ -33,6 +33,7 @@ public class HospitalParser {
 				.categories(CategoryParser.parse(hospitalDetailRaw.getCategories()))
 				.isEmergency(isEmergency)
 				.rowWriteDate(LocalDateTime.now())
+				.isManaged(true)
 				.build();
 		}
 

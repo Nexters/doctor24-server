@@ -41,15 +41,15 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 
 		PageResponse<HospitalBasicRaw> hospitalBasicPage = invoker.getHospitalPage(PageRequest.of(1, 150));
 		List<HospitalBasicRaw> hospitalBasicRaws = new ArrayList<>(hospitalBasicPage.getContents());
-//		while (hospitalBasicPage.hasNext()) {
-//			PageResponse<HospitalBasicRaw> result = invoker.getHospitalPage(
-//				PageRequest.of(hospitalBasicPage.getNextPage(), 150));
-//			if (result == null) {
-//				continue;
-//			}
-//			hospitalBasicPage = result;
-//			hospitalBasicRaws.addAll(hospitalBasicPage.getContents());
-//		}
+		while (hospitalBasicPage.hasNext()) {
+			PageResponse<HospitalBasicRaw> result = invoker.getHospitalPage(
+				PageRequest.of(hospitalBasicPage.getNextPage(), 150));
+			if (result == null) {
+				continue;
+			}
+			hospitalBasicPage = result;
+			hospitalBasicRaws.addAll(hospitalBasicPage.getContents());
+		}
 
 		log.info("Basic Read Finished! page number : {}", hospitalBasicPage.getPage());
 		List<HospitalDetailRaw> hospitalDetailRaws = new ArrayList<>();
@@ -84,7 +84,6 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 
 	private void checkManaged(Hospital hospital, HospitalDetailRaw hospitalDetailRaw) {
 		if (hospital.isManaged()) {
-			System.out.println("관리병원발견" + hospital.getName());
 			hospitalDetailRaw.setLongitude(hospital.getLocation().getX());
 			hospitalDetailRaw.setLatitude(hospital.getLocation().getY());
 			hospitalDetailRaw.setManaged(true);
@@ -106,6 +105,6 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 
 	private boolean isAlreadyInvoked() {
 		int count = counter.getAndIncrement();
-		return count > CALL_ONCE;
+		return count >= CALL_ONCE;
 	}
 }

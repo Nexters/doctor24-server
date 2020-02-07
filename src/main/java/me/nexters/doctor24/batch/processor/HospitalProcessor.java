@@ -26,12 +26,10 @@ public class HospitalProcessor implements ItemProcessor<HospitalRaw, List<Hospit
 		List<HospitalDetailRaw> hospitalDetailRaws = hospitalRaw.getHospitalDetailRaws();
 
 		log.info("Hospital Processor 시작");
-		List<Hospital> collect = hospitalBasicRaws.stream()
+		return hospitalBasicRaws.stream()
 			.flatMap(hospitalBasicRaw -> hospitalDetailRaws.stream()
 				.filter(hospitalDetailRaw -> hospitalDetailRaw.getId().equals(hospitalBasicRaw.getId()))
 				.map(hospitalDetailRaw -> HospitalParser.parse(hospitalBasicRaw, hospitalDetailRaw)))
 			.collect(Collectors.toList());
-
-		return collect;
 	}
 }

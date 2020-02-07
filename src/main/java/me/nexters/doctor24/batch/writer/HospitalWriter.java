@@ -28,9 +28,6 @@ public class HospitalWriter implements ItemWriter<List<Hospital>> {
 			hospitals -> hospitals
 				.forEach(hospital -> {
 					if (Objects.nonNull(hospital)) {
-						if (hospital.getName().equals("거북이한의원")) {
-							System.out.println(hospital);
-						}
 						hospitalRepository.save(hospital).block();
 					}
 				})

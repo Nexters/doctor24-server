@@ -45,6 +45,6 @@ public class PharmacyReader implements ItemReader<List<PharmacyRaw>> {
 
 	private boolean isAlreadyInvoked() {
 		int count = counter.getAndIncrement();
-		return count > CALL_ONCE;
+		return count >= CALL_ONCE;
 	}
 }

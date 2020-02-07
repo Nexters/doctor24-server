@@ -71,9 +71,9 @@ public class MedicalJobConfig {
 			.preventRestart()
 			.start(hospitalStep)
 			.next(hospitalDetailFailureStep)
-			//.next(hospitalCleansingStep)
-//			.next(pharmacyStep)
-//			.next(pharmacyCleansingStep)
+			.next(hospitalCleansingStep)
+			.next(pharmacyStep)
+			.next(pharmacyCleansingStep)
 			.build();
 	}
 
