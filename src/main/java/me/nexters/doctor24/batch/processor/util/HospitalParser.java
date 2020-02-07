@@ -21,6 +21,21 @@ public class HospitalParser {
 		List<Day> days = extractDays(hospitalBasicRaw);
 		boolean isEmergency = extractEmergency(hospitalBasicRaw);
 
+		if (hospitalDetailRaw.isManaged()) {
+			return Hospital.builder()
+				.id(hospitalBasicRaw.getId())
+				.name(hospitalBasicRaw.getName())
+				.location(new GeoJsonPoint(hospitalDetailRaw.getLongitude(), hospitalDetailRaw.getLatitude()))
+				.phone(hospitalBasicRaw.getPhone())
+				.address(AddressParser.parse(hospitalBasicRaw.getAddress()))
+				.hospitalType(HospitalType.find(hospitalBasicRaw.getType()))
+				.days(days)
+				.categories(CategoryParser.parse(hospitalDetailRaw.getCategories()))
+				.isEmergency(isEmergency)
+				.rowWriteDate(LocalDateTime.now())
+				.build();
+		}
+
 		return Hospital.builder()
 			.id(hospitalBasicRaw.getId())
 			.name(hospitalBasicRaw.getName())

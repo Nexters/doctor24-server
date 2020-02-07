@@ -2,7 +2,7 @@ package me.nexters.doctor24.batch.config;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -25,7 +25,7 @@ class JobConfigTest {
 		.addLong("startTime", System.currentTimeMillis())
 		.toJobParameters();
 
-	@Ignore
+	@Test
 	void 병원_전체_배치() throws Exception {
 		JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
 
