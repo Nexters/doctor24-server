@@ -31,6 +31,7 @@ public class Hospital implements DayFilterTemplate {
 	private List<String> categories;
 	private boolean isEmergency;
 	private LocalDateTime rowWriteDate;
+	private boolean isManaged;
 
 	public void updateCategories(List<String> categories) {
 		this.categories = categories;

@@ -87,4 +87,6 @@ public class HospitalDetailRaw {
 
 	@JsonProperty("dutyEryn")
 	private String emergencyCode;
+
+	private boolean isManaged;
 }

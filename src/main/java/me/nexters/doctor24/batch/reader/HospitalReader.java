@@ -78,7 +78,16 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 		HospitalDetailRaw hospitalDetailRaw = new HospitalDetailRaw();
 		hospitalDetailRaw.setId(basicRaw.getId());
 		hospitalDetailRaw.setCategories(CategoryParser.toRaw(hospital.getCategories()));
+		checkManaged(hospital, hospitalDetailRaw);
 		hospitalDetailRaws.add(hospitalDetailRaw);
+	}
+
+	private void checkManaged(Hospital hospital, HospitalDetailRaw hospitalDetailRaw) {
+		if (hospital.isManaged()) {
+			hospitalDetailRaw.setLongitude(hospital.getLocation().getX());
+			hospitalDetailRaw.setLatitude(hospital.getLocation().getY());
+			hospitalDetailRaw.setManaged(true);
+		}
 	}
 
 	private HospitalDetailRaw getHospitalDetailRaw(String id) {
@@ -96,6 +105,6 @@ public class HospitalReader implements ItemReader<HospitalRaw> {
 
 	private boolean isAlreadyInvoked() {
 		int count = counter.getAndIncrement();
-		return count > CALL_ONCE;
+		return count >= CALL_ONCE;
 	}
 }
