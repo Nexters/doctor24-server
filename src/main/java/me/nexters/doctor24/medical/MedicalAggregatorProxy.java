@@ -52,7 +52,8 @@ public class MedicalAggregatorProxy {
 		return Optional.ofNullable(aggregatorMap.get(type))
 			.map(aggregator -> aggregator.getFacilityBy(facilityId))
 			.map(facilityResponseMono -> facilityResponseMono
-				.map(facilityResponse -> facilityResponse.markToday(requestDay)))
+				.map(facilityResponse -> facilityResponse.markToday(requestDay))
+				.map(facilityResponse -> facilityResponse.markNightTimeServe(requestDay)))
 			.orElseThrow(
 				() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "지원 하지 않는 medical type 입니다 " + type));
 	}
