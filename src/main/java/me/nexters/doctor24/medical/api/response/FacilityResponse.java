@@ -47,6 +47,10 @@ public class FacilityResponse {
 	@Schema(description = "응급실 유무")
 	private boolean isEmergency;
 
+	@With
+	@Schema(description = "오늘 날짜")
+	private Day today;
+
 	@Schema(description = "운영시간")
 	private List<Day> days;
 
@@ -96,5 +100,15 @@ public class FacilityResponse {
 		}
 		return targetDay.get().getEndTime().isBefore(NIGHT_TIME_SERVE) ?
 			this.withNightTimeServe(false) : this.withNightTimeServe(true);
+	}
+
+	public FacilityResponse markToday(Day requestDay) {
+		return this.withToday(getTargetDay(requestDay));
+	}
+
+	private Day getTargetDay(Day day) {
+		// TODO 예외처리
+		return days.stream().filter(target -> target.getDayType() == day.getDayType())
+			.findFirst().orElseThrow(RuntimeException::new);
 	}
 }

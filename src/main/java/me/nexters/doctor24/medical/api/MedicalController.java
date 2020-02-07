@@ -65,7 +65,8 @@ public class MedicalController {
 		@ApiResponse(responseCode = "200", description = "successful operation")})
 	@GetMapping(value = "/facilities/{facilityId}")
 	public Mono<FacilityResponse> getFacility(
+		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper,
 		@PathVariable MedicalType type, @PathVariable String facilityId) {
-		return aggregatorProxy.getFacilityBy(type, facilityId);
+		return aggregatorProxy.getFacilityBy(type, facilityId, operatingHoursFilterWrapper.getDay(holidayManager));
 	}
 }
