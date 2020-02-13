@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import me.nexters.doctor24.medical.api.response.util.ResponseUtil;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
@@ -73,7 +74,7 @@ public class FacilityResponse {
 			.latitude(hospital.getLocation().getY())
 			.medicalType(MedicalType.hospital)
 			.phone(hospital.getPhone())
-			.categories(hospital.getCategories())
+			.categories(ResponseUtil.filterCategories(hospital))
 			.isEmergency(hospital.isEmergency())
 			.build();
 	}
