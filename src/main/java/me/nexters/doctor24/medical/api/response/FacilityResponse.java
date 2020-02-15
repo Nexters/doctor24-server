@@ -68,7 +68,7 @@ public class FacilityResponse {
 		return FacilityResponse.builder()
 			.id(hospital.getId())
 			.name(hospital.getName())
-			.address(hospital.getAddress())
+			.address(ResponseUtil.filterAddress(hospital.getAddress()))
 			.days(hospital.getDays())
 			.longitude(hospital.getLocation().getX())
 			.latitude(hospital.getLocation().getY())
@@ -83,7 +83,7 @@ public class FacilityResponse {
 		return FacilityResponse.builder()
 			.id(pharmacy.getId())
 			.name(pharmacy.getName())
-			.address(pharmacy.getAddress())
+			.address(ResponseUtil.filterAddress(pharmacy.getAddress()))
 			.days(pharmacy.getDays())
 			.longitude(pharmacy.getLocation().getX())
 			.latitude(pharmacy.getLocation().getY())
@@ -108,7 +108,7 @@ public class FacilityResponse {
 	}
 
 	private Day getTargetDay(Day day) {
-		// TODO 예외처리
+		// [예외처리 안함] 필터링에 걸려서 어차피 그날 하지 않는 병원은 걸러진다. matching 이 안될 일이 없음.
 		return days.stream().filter(target -> target.getDayType() == day.getDayType())
 			.findFirst().orElseThrow(RuntimeException::new);
 	}
