@@ -2,6 +2,7 @@ package me.nexters.doctor24.medical.api.request.filter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
 import javax.validation.Valid;
@@ -23,10 +24,24 @@ public class OperatingHoursFilterWrapper {
 
 	public Day getDay(HolidayManager holidayManager) {
 		Day requestDay = operatingHours == null ? currentTimeDay() : toDay();
+		Day validatedRequestDay = validateDayHours(requestDay);
 		if (!holidayManager.isHoliday(LocalDate.now())) {
-			return requestDay;
+			return validatedRequestDay;
 		}
-		return Day.of(Day.DayType.HOLIDAY, requestDay.getStartTime(), requestDay.getEndTime());
+		return Day.of(Day.DayType.HOLIDAY, validatedRequestDay.getStartTime(), validatedRequestDay.getEndTime());
+	}
+
+	private Day validateDayHours(Day requestDay) {
+		if (requestDay.getEndTime().getHour() == 0) {
+			return Day.of(requestDay.getDayType(), requestDay.getStartTime(), LocalTime.of(23, 59));
+		}
+
+		if (requestDay.getStartTime().getHour() > requestDay.getEndTime().getHour()) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,
+				"startTime must be less than end time  " + requestDay);
+		}
+
+		return requestDay;
 	}
 
 	private Day toDay() {
