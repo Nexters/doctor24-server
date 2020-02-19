@@ -15,8 +15,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RadiusLevel {
-	LEVEL1(1, 0.5, 60),
-	LEVEL2(2, 1, 80);
+	LEVEL1(1, 0.5, 100),
+	LEVEL2(2, 1, 100);
 
 	private final int level;
 	private final double rangeKM;
