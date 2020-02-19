@@ -54,7 +54,6 @@ public class MedicalController {
 		@Valid @Parameter(style = ParameterStyle.DEEPOBJECT) OperatingHoursFilterWrapper operatingHoursFilterWrapper,
 		@Parameter(description = "1(0.5km), 2(1km), 3(1.5km) ,4(2km) 단계의 반경범위")
 		@RequestParam(defaultValue = "1") int radiusLevel) {
-		log.info("[RADIUS LEVEL] {} {} {}", latitude, longitude, radiusLevel);
 		return aggregatorProxy.getFacilitiesBy(type, Double.parseDouble(latitude),
 			Double.parseDouble(longitude), category, operatingHoursFilterWrapper.getDay(holidayManager),
 			RadiusLevel.getBy(radiusLevel));
