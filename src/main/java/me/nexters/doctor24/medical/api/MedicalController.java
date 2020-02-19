@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.nexters.doctor24.medical.MedicalAggregatorProxy;
 import me.nexters.doctor24.medical.api.request.filter.OperatingHoursFilterWrapper;
 import me.nexters.doctor24.medical.api.request.param.RadiusLevel;
@@ -30,6 +31,7 @@ import reactor.core.publisher.Mono;
 /**
  * @author manki.kim
  */
+@Slf4j
 @Tag(name = SwaggerApiTag.MEDICAL, description = "의료 서비스 정보 API")
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
