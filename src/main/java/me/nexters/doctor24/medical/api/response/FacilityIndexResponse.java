@@ -14,6 +14,7 @@ import lombok.With;
 import me.nexters.doctor24.medical.api.response.util.ResponseUtil;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
+import me.nexters.doctor24.medical.corona.model.mongo.CoronaHospital;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
 
@@ -72,6 +73,20 @@ public class FacilityIndexResponse {
 			.phone(hospital.getPhone())
 			.isEmergency(hospital.isEmergency())
 			.categories(ResponseUtil.filterCategories(hospital))
+			.build();
+	}
+
+	public static FacilityIndexResponse fromCoronaHospital(CoronaHospital hospital, Day requestDay) {
+		return FacilityIndexResponse.builder()
+			.id(hospital.getId())
+			.name(hospital.getName())
+			.address(ResponseUtil.filterAddress(hospital.getAddress()))
+			.day(getToday(hospital.getDays(), requestDay))
+			.longitude(hospital.getLocation().getX())
+			.latitude(hospital.getLocation().getY())
+			.medicalType(MedicalType.hospital)
+			.phone(hospital.getPhone())
+			.isEmergency(hospital.isEmergency())
 			.build();
 	}
 
