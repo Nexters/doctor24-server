@@ -67,7 +67,9 @@ public class CoronaMigrationTest {
 						.location(point)
 						.days(getDays(mon, tues, wedn, thurs, fri, sat, sun, hol))
 						.address(readValue(row.getCell(6)))
+						.isEmergency(readValue(row.createCell(15)).equals("Y"))
 						.build();
+					System.out.println(coronaHospital);
 					//coronaRepository.save(coronaHospital).block();
 				}
 			}
