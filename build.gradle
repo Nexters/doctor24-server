@@ -30,6 +30,7 @@ dependencyManagement {
 }
 
 dependencies {
+    implementation 'org.apache.poi:poi-ooxml:3.15'
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'com.playtika.reactivefeign:feign-reactor-webclient:1.0.45'
     implementation 'com.playtika.reactivefeign:feign-reactor-spring-configuration:1.0.45'
