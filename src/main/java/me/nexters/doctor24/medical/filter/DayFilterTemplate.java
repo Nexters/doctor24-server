@@ -23,4 +23,9 @@ public interface DayFilterTemplate {
 		Day matchDay = matchDayOpt.get();
 		return matchDay.isInRange(requestDay.getStartTime(), requestDay.getEndTime());
 	}
+
+	default boolean isOpenWithoutTime(Day requestDay) {
+		return getDays().stream()
+			.anyMatch(day -> day.getDayType() == requestDay.getDayType());
+	}
 }
