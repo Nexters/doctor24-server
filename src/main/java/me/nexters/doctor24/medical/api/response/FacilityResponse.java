@@ -1,21 +1,17 @@
 package me.nexters.doctor24.medical.api.response;
 
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Optional;
-
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import lombok.*;
 import me.nexters.doctor24.medical.api.response.util.ResponseUtil;
 import me.nexters.doctor24.medical.api.type.MedicalType;
 import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.corona.model.mongo.CoronaHospital;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
+
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author manki.kim
@@ -88,7 +84,7 @@ public class FacilityResponse {
 			.days(hospital.getDays())
 			.longitude(hospital.getLocation().getX())
 			.latitude(hospital.getLocation().getY())
-			.medicalType(MedicalType.hospital)
+			.medicalType(MedicalType.corona)
 			.phone(hospital.getPhone())
 			.isEmergency(hospital.isEmergency())
 			.build();
