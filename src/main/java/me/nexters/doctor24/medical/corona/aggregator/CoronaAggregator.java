@@ -45,7 +45,7 @@ public class CoronaAggregator implements MedicalAggregator {
 		return coronaRepository.findByLocationNear(new Point(longitude, latitude),
 			new Distance(10.0, Metrics.KILOMETERS),
 			PageRequest.of(0, inquiryCount))
-			.filter(hospital -> hospital.isOpen(requestDay))
+			//.filter(hospital -> hospital.isOpen(requestDay))
 			.map(hospital -> FacilityIndexResponse.fromCoronaHospital(hospital, requestDay));
 	}
 

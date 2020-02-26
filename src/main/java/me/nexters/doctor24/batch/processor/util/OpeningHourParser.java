@@ -21,11 +21,12 @@ public class OpeningHourParser {
 	}
 
 	public static LocalTime parseForMig(String input) {
-		int hour = Integer.parseInt(input.substring(0, 2));
+		String removedSpaceInput = input.trim();
+		int hour = Integer.parseInt(removedSpaceInput.substring(0, 2));
 		if (hour >= 24) {
 			return LocalTime.of(23, 59);
 		}
-		int min = Integer.parseInt(input.substring(3, 5));
+		int min = Integer.parseInt(removedSpaceInput.substring(3, 5));
 		return LocalTime.of(hour, min);
 	}
 
