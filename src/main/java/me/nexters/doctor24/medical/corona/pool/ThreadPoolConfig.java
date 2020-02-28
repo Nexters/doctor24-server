@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Configuration;
 public class ThreadPoolConfig {
 	@Bean
 	public Executor inquiryPool() {
-		return Executors.newFixedThreadPool(8);
+		return Executors.newFixedThreadPool(4);
 	}
 }
