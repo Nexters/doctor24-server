@@ -11,11 +11,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class ThreadPoolConfig {
-
-	private static final Integer DEFAULT_POOL_SIZE = Runtime.getRuntime().availableProcessors();
-
 	@Bean
 	public Executor inquiryPool() {
-		return Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
+		return Executors.newFixedThreadPool(8);
 	}
 }
