@@ -18,4 +18,5 @@ public interface CoronaRepository extends ReactiveMongoRepository<CoronaHospital
 
 	Flux<CoronaHospital> findByLocationWithin(Polygon polygon, Pageable pageable);
 
+	Flux<CoronaHospital> findByName(String name);
 }
