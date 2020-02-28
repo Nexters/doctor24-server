@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.nexters.doctor24.medical.corona.analyzer.CoronaClinicDiffAnalyzer;
+import me.nexters.doctor24.medical.corona.model.NewCoronaClinic;
 import reactor.core.publisher.Flux;
 
 /**
@@ -22,7 +23,7 @@ public class CoronaController {
 	private final CoronaClinicDiffAnalyzer coronaClinicDiffAnalyzer;
 
 	@GetMapping("/diff")
-	public Flux<String> getNewClinics() {
+	public Flux<NewCoronaClinic> getNewClinics() {
 		return coronaClinicDiffAnalyzer.getNewClinics();
 	}
 }

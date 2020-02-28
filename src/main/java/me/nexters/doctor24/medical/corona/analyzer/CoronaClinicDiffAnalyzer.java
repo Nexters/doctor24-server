@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import me.nexters.doctor24.medical.corona.invoker.CoronaClinicsInvoker;
+import me.nexters.doctor24.medical.corona.model.NewCoronaClinic;
 import me.nexters.doctor24.medical.corona.model.mongo.CoronaHospital;
 import me.nexters.doctor24.medical.corona.repository.CoronaRepository;
 import reactor.core.publisher.Flux;
@@ -25,18 +26,22 @@ public class CoronaClinicDiffAnalyzer {
 	private final CoronaRepository coronaRepository;
 	private final Executor inquiryPool;
 
-	public Flux<String> getNewClinics() {
+	public Flux<NewCoronaClinic> getNewClinics() {
 		Mono<String> html = coronaClinicsInvoker.getClinicPageHtml();
 
 		return html.map(Jsoup::parse)
 			.flatMapMany(doc -> Flux.fromIterable(doc.getElementsByClass("tb_center").select("tr"))
 				.map(element -> element.select("td").get(2).text().replace("*(검체채취 가능)", ""))
 				.map(String::trim))
-			.filter(this::exist)
-			.map(name -> name + ", ");
+			.flatMap(name -> {
+				if (notExist(name)) {
+					return Flux.just(NewCoronaClinic.of(name));
+				}
+				return Flux.empty();
+			});
 	}
 
-	private boolean exist(String clinic) {
+	private boolean notExist(String clinic) {
 		CompletableFuture<CoronaHospital> future = CompletableFuture.supplyAsync(
 			() -> coronaRepository.findByName(clinic).blockFirst(), inquiryPool);
 
