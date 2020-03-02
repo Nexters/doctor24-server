@@ -58,6 +58,9 @@ dependencies {
     //swagger
     implementation 'org.springdoc:springdoc-openapi-webflux-core:1.2.22'
     implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.2.22'
+
+    //jsoup
+    implementation 'org.jsoup:jsoup:1.12.1'
 }
 
 test {
