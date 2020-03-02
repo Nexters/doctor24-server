@@ -11,6 +11,7 @@ import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.corona.model.mongo.CoronaHospital;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
+import me.nexters.doctor24.medical.secure.model.SecureHospital;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -87,6 +88,20 @@ public class FacilityIndexResponse {
 			.phone(hospital.getPhone())
 			.isEmergency(hospital.isEmergency())
 			.build();
+	}
+
+	public static FacilityIndexResponse fromSecureHospital(SecureHospital hospital, Day requestDay) {
+		return FacilityIndexResponse.builder()
+				.id(hospital.getId())
+				.name(hospital.getName())
+				.address(ResponseUtil.filterAddress(hospital.getAddress()))
+				.day(getToday(hospital.getDays(), requestDay))
+				.longitude(hospital.getLocation().getX())
+				.latitude(hospital.getLocation().getY())
+				.medicalType(MedicalType.secure)
+				.phone(hospital.getPhone())
+				.isEmergency(hospital.isEmergency())
+				.build();
 	}
 
 	public static FacilityIndexResponse fromPharmacy(Pharmacy pharmacy, Day requestDay) {
