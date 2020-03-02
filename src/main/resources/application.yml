@@ -7,7 +7,7 @@ spring:
       enabled: false
 
 server:
-  port: 8083
+  port: 8080
 
 management:
   endpoints.web.base-path: /application
