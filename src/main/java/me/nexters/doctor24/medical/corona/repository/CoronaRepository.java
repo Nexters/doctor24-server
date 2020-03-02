@@ -1,12 +1,10 @@
 package me.nexters.doctor24.medical.corona.repository;
 
+import me.nexters.doctor24.medical.corona.model.mongo.CoronaHospital;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
-import org.springframework.data.geo.Polygon;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
-
-import me.nexters.doctor24.medical.corona.model.mongo.CoronaHospital;
 import reactor.core.publisher.Flux;
 
 /**

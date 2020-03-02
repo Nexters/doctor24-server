@@ -8,6 +8,7 @@ import me.nexters.doctor24.medical.common.Day;
 import me.nexters.doctor24.medical.corona.model.mongo.CoronaHospital;
 import me.nexters.doctor24.medical.hospital.model.mongo.Hospital;
 import me.nexters.doctor24.medical.pharmacy.model.mongo.Pharmacy;
+import me.nexters.doctor24.medical.secure.model.SecureHospital;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -88,6 +89,20 @@ public class FacilityResponse {
 			.phone(hospital.getPhone())
 			.isEmergency(hospital.isEmergency())
 			.build();
+	}
+
+	public static FacilityResponse fromSecureHospital(SecureHospital secureHospital) {
+		return FacilityResponse.builder()
+				.id(secureHospital.getId())
+				.name(secureHospital.getName())
+				.address(ResponseUtil.filterAddress(secureHospital.getAddress()))
+				.days(secureHospital.getDays())
+				.longitude(secureHospital.getLocation().getX())
+				.latitude(secureHospital.getLocation().getY())
+				.medicalType(MedicalType.secure)
+				.phone(secureHospital.getPhone())
+				.isEmergency(secureHospital.isEmergency())
+				.build();
 	}
 
 	public static FacilityResponse fromPharmacy(Pharmacy pharmacy) {
