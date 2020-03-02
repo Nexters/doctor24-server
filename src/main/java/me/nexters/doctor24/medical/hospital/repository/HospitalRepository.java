@@ -16,5 +16,4 @@ public interface HospitalRepository extends ReactiveMongoRepository<Hospital, St
 	Flux<Hospital> findByLocationNearAndCategories(Point point, Distance distance, String category, Pageable pageable);
 
 	Flux<Hospital> findByLocationWithin(Polygon polygon, Pageable pageable);
-
 }
