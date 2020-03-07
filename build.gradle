@@ -4,12 +4,6 @@ plugins {
     id 'java'
 }
 
-dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR3'
-    }
-}
-
 test {
     useJUnitPlatform()
     testLogging {
@@ -17,19 +11,37 @@ test {
     }
 }
 
-allprojects {
+subprojects {
     group = 'me.nexters'
     version = '0.0.1-SNAPSHOT'
-}
 
-subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     sourceCompatibility = '11'
 
+    task initSourceFolders {
+        sourceSets*.java.srcDirs*.each {
+            if( !it.exists() ) {
+                it.mkdirs()
+            }
+        }
+
+        sourceSets*.resources.srcDirs*.each {
+            if( !it.exists() ) {
+                it.mkdirs()
+            }
+        }
+    }
+
     repositories {
         mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR3'
+        }
     }
 
     configurations {
