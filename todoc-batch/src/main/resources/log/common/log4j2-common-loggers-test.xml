@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Loggers>
+    <Logger name="STDOUT" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </Logger>
+    <Root level="info" additvity="false">
+        <AppenderRef ref="LOG"/>
+        <AppenderRef ref="ERROR_LOG"/>
+    </Root>
+</Loggers>

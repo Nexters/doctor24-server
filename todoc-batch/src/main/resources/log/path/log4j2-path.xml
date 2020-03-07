@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Properties>
+    <property name="LOG_PATH" value="/home/doctor24/logs/${sys:app.name:-undefined}"/>
+    <property name="LOG_FILE" value="${LOG_PATH}/${sys:app.name:-undefined}"/>
+    <property name="LOG_BACKUP_DIR" value="${LOG_PATH}/archived"/>
+    <property name="LOG_BACKUP" value="${LOG_PATH}/archived/${sys:app.name:-undefined}"/>
+</Properties>
