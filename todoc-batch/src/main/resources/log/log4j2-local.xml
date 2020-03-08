@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="debug">
+    <Properties>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%-5level</Property>
+        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd HH:mm:ss.SSS</Property>
+    </Properties>
+    <Appenders>
+        <Console name="LOG" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%clr{%d{${LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="me.nexters.doctor24" level="debug"/>
+        <Logger name="org.springframework" level="info"/>
+        <Root level="info">
+            <AppenderRef ref="LOG"/>
+        </Root>
+    </Loggers>
+</Configuration>

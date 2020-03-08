@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%-5p](%-35c{1}:%-3L) [%t] %m%n"/>
+    </Console>
+    <RollingFile name="LOG">
+        <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+        <FileName>${LOG_FILE}.log</FileName>
+        <Append>true</Append>
+        <FilePattern>${LOG_BACKUP}.%d{yyyy-MM-dd}.log</FilePattern>
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+        </Policies>
+        <DefaultRolloverStrategy>
+            <Delete basePath="${LOG_BACKUP_DIR}">
+                <IfFileName glob="${sys:app.name:-undefined}.*.log" />
+                <IfLastModified age="14d" />
+            </Delete>
+        </DefaultRolloverStrategy>
+        <PatternLayout>
+            <Pattern>%d{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</Pattern>
+        </PatternLayout>
+    </RollingFile>
+
+    <RollingFile name="ERROR_LOG">
+        <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+        <FileName>${LOG_FILE}_error.log</FileName>
+        <Append>true</Append>
+        <FilePattern>${LOG_BACKUP}_error.%d{yyyy-MM-dd}.log</FilePattern>
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+        </Policies>
+        <DefaultRolloverStrategy>
+            <Delete basePath="${LOG_BACKUP_DIR}">
+                <IfFileName glob="${sys:app.name:-undefined}_error.*.log" />
+                <IfLastModified age="14d" />
+            </Delete>
+        </DefaultRolloverStrategy>
+        <PatternLayout>
+            <Pattern>%d{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</Pattern>
+        </PatternLayout>
+    </RollingFile>
+</Appenders>

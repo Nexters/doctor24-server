@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: local
+    include: swagger, mongo, logging, key
+
+server:
+  port: 8080
+
+management:
+  endpoints.web.base-path: /application
+  endpoints.web.exposure.include: '*'
+
+---

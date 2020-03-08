@@ -1,0 +1,6 @@
+spring:
+  profiles: local,dev
+  data:
+    mongodb:
+      uri: mongodb://27.96.135.239:27017
+      database: test5
