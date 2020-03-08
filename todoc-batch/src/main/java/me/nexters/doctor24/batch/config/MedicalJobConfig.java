@@ -156,7 +156,7 @@ public class MedicalJobConfig {
 		}});
 		reader.setTargetType(Pharmacy.class);
 		LocalDateTime threshold = JobParameterUtil.millsToLocalDateTime(startTime);
-		Query query = new Query(where("rowWriteDate").lt(threshold));
+		Query query = new Query(where("rowWriteDate").lt(threshold).and("isManaged").is("false"));
 		reader.setQuery(query);
 		return reader;
 	}

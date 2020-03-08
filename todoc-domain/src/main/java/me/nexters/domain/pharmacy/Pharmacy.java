@@ -25,4 +25,5 @@ public class Pharmacy implements DayFilterTemplate {
 	private String address;
 	private String phone;
 	private LocalDateTime rowWriteDate;
+	private boolean isManaged;
 }
