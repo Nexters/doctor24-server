@@ -25,6 +25,7 @@ public class PharmacyParser {
 			.address(pharmacyRaw.getAddress())
 			.phone(pharmacyRaw.getPhone())
 			.rowWriteDate(LocalDateTime.now())
+				.isManaged(false)
 			.build();
 	}
 
