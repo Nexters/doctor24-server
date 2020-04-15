@@ -14,7 +14,7 @@
         <DefaultRolloverStrategy>
             <Delete basePath="${LOG_BACKUP_DIR}">
                 <IfFileName glob="${sys:app.name:-undefined}.*.log" />
-                <IfLastModified age="14d" />
+                <IfLastModified age="1d" />
             </Delete>
         </DefaultRolloverStrategy>
         <PatternLayout>
@@ -33,7 +33,7 @@
         <DefaultRolloverStrategy>
             <Delete basePath="${LOG_BACKUP_DIR}">
                 <IfFileName glob="${sys:app.name:-undefined}_error.*.log" />
-                <IfLastModified age="14d" />
+                <IfLastModified age="1d" />
             </Delete>
         </DefaultRolloverStrategy>
         <PatternLayout>
