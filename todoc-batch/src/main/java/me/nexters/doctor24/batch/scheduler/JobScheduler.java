@@ -15,7 +15,7 @@ public class JobScheduler {
 	private final Job medicalJob;
 	private final JobLauncher jobLauncher;
 
-	@Scheduled(cron = "0 0 03 * * ?")
+	@Scheduled(cron = "0 47 13 * * ?")
 	public void getMedicalJob() {
 		try {
 			JobParameters jobParameters = new JobParametersBuilder()
