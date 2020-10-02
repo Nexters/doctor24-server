@@ -1,14 +1,16 @@
 package me.nexters.doctor24.medical.external.holiday;
 
-import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
+import static org.junit.Assert.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
+import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
 
 /**
  * @author manki.kim
@@ -16,12 +18,13 @@ import static org.junit.Assert.assertFalse;
 @SpringBootTest
 public class HolidayInquiresTest {
 
-    @Autowired
-    private HolidayInquires holidayInquires;
+	@Autowired
+	private HolidayInquires holidayInquires;
 
-    @Test
-    public void getHoliday() {
-        List<HolidayRaw> holidayRaws = holidayInquires.getHolidayRaws(2020);
-        assertFalse(CollectionUtils.isEmpty(holidayRaws));
-    }
+	@Test
+	public void getHoliday() {
+		List<HolidayRaw> holidayRaws = holidayInquires.getHolidayRaws(LocalDate.now().getYear(),
+			LocalDate.now().getMonthValue());
+		assertFalse(CollectionUtils.isEmpty(holidayRaws));
+	}
 }

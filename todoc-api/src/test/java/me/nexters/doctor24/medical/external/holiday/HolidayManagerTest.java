@@ -1,14 +1,14 @@
 package me.nexters.doctor24.medical.external.holiday;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author manki.kim
@@ -20,6 +20,7 @@ public class HolidayManagerTest {
 
     @Nested
     class True {
+        @Disabled
         @Test
         public void isHoliday() {
             boolean result = holidayManager.isHoliday(LocalDate.of(2020, 1, 27));
