@@ -1,12 +1,12 @@
 package me.nexters.doctor24.medical.external.holiday;
 
-import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
-
 import java.util.List;
+
+import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
 
 /**
  * @author manki.kim
  */
 public interface HolidayInquires {
-    List<HolidayRaw> getHolidayRaws(int year);
+    List<HolidayRaw> getHolidayRaws(int year, int month);
 }

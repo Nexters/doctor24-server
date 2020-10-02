@@ -1,16 +1,17 @@
 package me.nexters.doctor24.medical.external.holiday;
 
-import lombok.RequiredArgsConstructor;
-import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
 
 /**
  * @author manki.kim
@@ -22,7 +23,8 @@ public class HolidayManagerFactory implements FactoryBean<HolidayManager> {
 
     @Override
     public HolidayManager getObject() {
-        List<HolidayRaw> holidayRaws = holidayInquires.getHolidayRaws(LocalDate.now().getYear());
+        LocalDate now = LocalDate.now();
+        List<HolidayRaw> holidayRaws = holidayInquires.getHolidayRaws(now.getYear(), now.getMonthValue());
         Set<LocalDate> holidaySet = holidayRaws.stream()
                 .filter(holidayRaw -> holidayRaw.getIsHoliday().equals("Y"))
                 .map(HolidayRaw::getDate)

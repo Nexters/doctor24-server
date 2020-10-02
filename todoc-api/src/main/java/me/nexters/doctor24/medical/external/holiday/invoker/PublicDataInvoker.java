@@ -1,12 +1,7 @@
 package me.nexters.doctor24.medical.external.holiday.invoker;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import me.nexters.doctor24.medical.external.holiday.HolidayInquires;
-import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
-import me.nexters.doctor24.medical.external.holiday.dto.HolidayResponse;
-import me.nexters.doctor24.medical.external.support.JacksonUtils;
-import me.nexters.doctor24.medical.external.support.JsonParser;
+import java.util.List;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import me.nexters.doctor24.medical.external.holiday.HolidayInquires;
+import me.nexters.doctor24.medical.external.holiday.dto.HolidayRaw;
+import me.nexters.doctor24.medical.external.holiday.dto.HolidayResponse;
+import me.nexters.doctor24.medical.external.support.JacksonUtils;
+import me.nexters.doctor24.medical.external.support.JsonParser;
 
 @Slf4j
 @Component
@@ -26,8 +27,8 @@ public class PublicDataInvoker implements HolidayInquires {
     private String holidayKey;
 
     @Override
-    public List<HolidayRaw> getHolidayRaws(int year) {
-        String xmlResult = holidayInvoker.getHoliday(holidayKey, year).block();
+    public List<HolidayRaw> getHolidayRaws(int year, int month) {
+        String xmlResult = holidayInvoker.getHoliday(holidayKey, year, month).block();
         HolidayResponse response = toObjectFromResponse(xmlResult, HolidayResponse.class);
 
         return response.getHolidayRaws();
