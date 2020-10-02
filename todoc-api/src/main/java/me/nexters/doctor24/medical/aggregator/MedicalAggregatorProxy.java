@@ -27,7 +27,7 @@ import static java.util.stream.Collectors.groupingBy;
 @Service
 public class MedicalAggregatorProxy {
 	private final Map<MedicalType, MedicalAggregator> aggregatorMap;
-	private static final int LIMIT_REQUEST = 20;
+	private static final int LIMIT_REQUEST = 30;
 
 	public MedicalAggregatorProxy(List<MedicalAggregator> medicalAggregators) {
 		aggregatorMap = medicalAggregators.stream()

@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 @Getter
 @AllArgsConstructor
 public enum RadiusLevel {
-	LEVEL1(1, 1, 60),
-	LEVEL2(2, 2, 80);
+	LEVEL1(1, 1, 80),
+	LEVEL2(2, 2, 100);
 
 	private final int level;
 	private final double rangeKM;
